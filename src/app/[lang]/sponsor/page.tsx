@@ -34,7 +34,6 @@ export default async function SponsorPage() {
           <h3 className="reveal text-xs font-bold uppercase tracking-[0.25em] text-muted">{t.figuresTitle}</h3>
           <KeyFigures t={t} />
           <CantonBars t={t} />
-          <p className="text-xs text-muted">{t.source}</p>
         </section>
 
         {/* ------------------------------------------- pacchetti */}

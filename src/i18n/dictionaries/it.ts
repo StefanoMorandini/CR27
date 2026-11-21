@@ -173,7 +173,6 @@ const it = {
       packagesNote: "Le condizioni dell'edizione 2027 sono in definizione: contattaci per un'offerta.",
       maxSponsors: "massimo {n} sponsor",
       onRequest: "Su richiesta",
-      source: "Fonti: iscrizioni Swiss Athletics 2025, comunicato stampa e dossier sponsor 2025.",
     },
     "chi-siamo": {
       eyebrow: "Campionati Regionali 2027",

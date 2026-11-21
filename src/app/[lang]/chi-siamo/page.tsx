@@ -63,7 +63,6 @@ export default async function ChiSiamoPage() {
               <p className="mt-3 text-ink/80">{t.regionText}</p>
             </div>
           </div>
-          <p className="text-xs text-muted">{s.source}</p>
         </section>
 
         <section aria-labelledby="partners">
