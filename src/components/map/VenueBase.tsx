@@ -2,10 +2,10 @@
  * Base della mappa dello Stadio Comunale di Bellinzona (nord in alto).
  * - "mappa": public/map/base.svg, generata da scripts/map/build_base.py (dati swisstopo)
  * - "foto":  public/map/swissimage.webp, foto aerea SWISSIMAGE © swisstopo
- * Sistema di coordinate: viewBox 0 0 1354 920 (lo stesso dei punti in `map_points`).
+ * Sistema di coordinate: viewBox 0 0 1354 1159 (lo stesso dei punti in `map_points`).
  */
 export const MAP_W = 1354;
-export const MAP_H = 920;
+export const MAP_H = 1159;
 
 export type MapLayer = "mappa" | "foto";
 

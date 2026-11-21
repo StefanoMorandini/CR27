@@ -80,7 +80,9 @@ Per aggiungere un altro admin: creare l'utente in Supabase → Authentication �
 - Base vettoriale `public/map/base.svg`, generata da `scripts/map/build_base.py` con dati
   swisstopo (carta nazionale vettorializzata + rilievo su SWISSIMAGE): `python3 scripts/map/build_base.py`
 - Foto aerea `public/map/swissimage.webp` (SWISSIMAGE © swisstopo, open data: citare la fonte)
-- Coordinate dei punti: viewBox 0 0 1354 920, nord in alto (~0,41 m per unità)
+- Pipeline: `scripts/map/vectorize.py` (maschere dalla carta) → `scripts/map/trace.js` (potrace) → `build_base.py`
+- Coordinate dei punti: viewBox 0 0 1354 1159, nord in alto (~0,41 m per unità)
+- Navigazione: trascina, rotellina, pizzico, doppio clic (`src/components/map/usePanZoom.ts`)
 - Punti e simboli gestiti in `/admin/mappa` (tabella `map_points`)
 
 ## Multilingua

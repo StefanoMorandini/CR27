@@ -112,6 +112,8 @@ const it = {
       indicative: "Posizione indicativa",
       zoomIn: "Ingrandisci",
       zoomOut: "Riduci",
+      reset: "Vista intera",
+      hint: "Trascina per spostarti · rotellina, pizzico o doppio clic per lo zoom",
       pedane: "Le pedane",
       layerMap: "Mappa",
       layerPhoto: "Foto aerea",

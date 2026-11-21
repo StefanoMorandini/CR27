@@ -213,7 +213,7 @@ export async function saveMapPoint(formData: FormData) {
     icon,
     description: optional(formData, "description"),
     x: Math.min(1354, Math.max(0, Math.round(x * 10) / 10)),
-    y: Math.min(920, Math.max(0, Math.round(y * 10) / 10)),
+    y: Math.min(1159, Math.max(0, Math.round(y * 10) / 10)),
     verified: bool(formData, "verified"),
     sort_order: int(formData, "sort_order"),
     published: bool(formData, "published"),

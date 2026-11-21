@@ -24,13 +24,14 @@ export function Marker({ p, active, dim, scale = 1 }: { p: Pick<MapPoint, "x" | 
         <circle r={r} fill={color} stroke="#fff" strokeWidth="3" strokeDasharray={p.verified ? undefined : "5 3"} />
       )}
       <g
-        transform="translate(-11 -11) scale(.9167)"
+        transform="translate(-11.5 -11.5) scale(.96)"
         color="#fff"
         fill="none"
         stroke="currentColor"
-        strokeWidth="2.1"
+        strokeWidth="2.2"
         strokeLinecap="round"
         strokeLinejoin="round"
+        style={{ ["--icon-bg" as string]: color }}
       >
         <IconGlyph name={p.icon} />
       </g>

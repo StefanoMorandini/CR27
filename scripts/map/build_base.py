@@ -5,7 +5,8 @@ Fonti (swisstopo, open data — citare "© swisstopo"):
 - Carta nazionale (ch.swisstopo.pixelkarte-farbe): edifici, strade, aree sportive e alberi,
   vettorializzati in topo_paths.json / trees.json
 - SWISSIMAGE (ch.swisstopo.swissimage): rilievo di pista, campi, pedane e parcheggi
-Sistema di coordinate: viewBox 0 0 1354 920 (nord in alto, ~0.41 m per unità).
+Sistema di coordinate: viewBox 0 0 1354 1159 (nord in alto, ~0.41 m per unità).
+Pipeline: vectorize.py (maschere dalla carta) → trace.js (potrace) → questo script.
 Esecuzione: python3 scripts/map/build_base.py
 """
 import json
@@ -16,7 +17,7 @@ HERE = Path(__file__).parent
 topo = json.loads((HERE / "topo_paths.json").read_text())
 trees = json.loads((HERE / "trees.json").read_text())
 
-W, H = 1354, 920
+W, H = 1354, 1159
 
 # Stadio: centro della pista e orientamento (rilevati da SWISSIMAGE)
 CX, CY, ROT = 692, 516, 43
@@ -36,10 +37,10 @@ def lanes():
     for i in range(7):
         r = R_IN + i * 3
         out.append(f'<rect x="{-(STRAIGHT / 2 + r):.1f}" y="{-r}" width="{STRAIGHT + 2 * r:.1f}" height="{2 * r}" rx="{r}"/>')
-    # corsie del prolungamento (partenza 100 m)
+    # corsie del prolungamento a sud-est (partenza 100 m)
     for i in range(7):
         y = -(R_IN + i * 3)
-        out.append(f'<line x1="-180" y1="{y}" x2="{-STRAIGHT / 2:.1f}" y2="{y}"/>')
+        out.append(f'<line x1="192" y1="{y}" x2="{STRAIGHT / 2:.1f}" y2="{y}"/>')
     return "".join(out)
 
 def arc_band(cx, r1, r2, a0, a1):
@@ -79,7 +80,7 @@ stadium = f"""
   <!-- pista, fascia lungo la tribuna, prolungamento del rettilineo -->
   <rect x="{-(STRAIGHT / 2 + R_OUT):.1f}" y="{-R_OUT}" width="{STRAIGHT + 2 * R_OUT}" height="{2 * R_OUT}" rx="{R_OUT}" fill="{C['track']}"/>
   <rect x="-82" y="-142" width="254" height="40" fill="{C['track']}"/>
-  <rect x="-182" y="{-R_OUT}" width="90" height="20" fill="{C['track']}"/>
+  <rect x="92" y="{-R_OUT}" width="102" height="20" fill="{C['track']}"/>
   <g fill="none" stroke="#fff" stroke-opacity=".7" stroke-width=".7">{lanes()}</g>
   <!-- pedana del lungo/triplo con due buche -->
   <rect x="-55" y="-134" width="190" height="6" fill="{C['track2']}"/>
@@ -88,8 +89,8 @@ stadium = f"""
   <!-- campo interno (prato chiuso) -->
   {pitch(0, 0, 0, 267, 163, C['grass'])}
   <rect x="-133.5" y="-81.5" width="267" height="163" fill="url(#closed)"/>
-  <!-- linee di partenza (100 m) e d'arrivo -->
-  <g stroke="#fff" stroke-width="2.4"><line x1="-159.5" y1="-88" x2="-159.5" y2="-106"/><line x1="{STRAIGHT / 2:.1f}" y1="-88" x2="{STRAIGHT / 2:.1f}" y2="-106"/></g>
+  <!-- partenza 100 m (prolungamento a sud-est, a destra della tribuna) e arrivo (nord-ovest) -->
+  <g stroke="#fff" stroke-width="2.4"><line x1="{-STRAIGHT / 2 + 242:.1f}" y1="-88" x2="{-STRAIGHT / 2 + 242:.1f}" y2="-106"/><line x1="{-STRAIGHT / 2:.1f}" y1="-88" x2="{-STRAIGHT / 2:.1f}" y2="-106"/></g>
   <!-- gabbia disco/martello -->
   <circle cx="-172.7" cy="23" r="5" fill="#fff"/>
   <path d="M-178.5 18.5a7.5 7.5 0 1 0 11.6 0" fill="none" stroke="#7d828a" stroke-width="1.8" stroke-linecap="round"/>
@@ -103,6 +104,7 @@ parkings = {
     "chiusi": "835,268 900,215 985,262 950,352 872,382 808,318",
     "nordovest": "466,312 540,296 556,338 482,354",
     "ovest": "300,462 366,432 414,480 340,552",
+    "sud": "675,840 865,888 840,1002 672,872",
 }
 
 def label(x, y, text, rot=0, size=11, weight=600, fill=None, spacing=0):
@@ -116,20 +118,21 @@ labels = "".join([
     label(742, 238, "Via Lucomagno", 40, 10, 500),
     label(1172, 420, "Viale Giuseppe Motta", 38, 10, 500),
     label(548, 782, "Via Luigi Lavizzari", -18, 10, 500),
+    label(905, 870, "Via Luigi Lavizzari", 9, 10, 500),
     label(700, 528, "PRATO CHIUSO", 43, 11, 700, "#ffffff", 2),
     label(1022, 640, "Campo di riscaldamento", 22, 12, 700, "#3f6b35"),
     label(478, 690, "Campo ovest", 62, 12, 700, "#3f6b35"),
     label(790, 372, "Tribuna", 43, 10, 700),
 ])
 
-scale = (f'<g transform="translate(24 896)"><rect x="0" y="-4" width="121" height="4" fill="#1b1b1b"/>'
+scale = (f'<g transform="translate(24 {H - 24})"><rect x="0" y="-4" width="121" height="4" fill="#1b1b1b"/>'
          f'<rect x="60.5" y="-4" width="60.5" height="4" fill="#fff" stroke="#1b1b1b" stroke-width=".8"/>'
          f'<text x="0" y="-9" font-size="10" font-weight="600" fill="#1b1b1b">0</text>'
          f'<text x="121" y="-9" font-size="10" font-weight="600" fill="#1b1b1b" text-anchor="middle">50 m</text></g>')
 north = ('<g transform="translate(1318 38)"><circle r="18" fill="#fff" stroke="#d8d2c8"/>'
          '<path d="M0 -12L6 5 0 1 -6 5Z" fill="#1b1b1b"/>'
          '<text y="14" text-anchor="middle" font-size="8" font-weight="700" fill="#1b1b1b">N</text></g>')
-attribution = '<text x="1346" y="912" font-size="9" fill="#8a8f96" text-anchor="end">Base cartografica © swisstopo</text>'
+attribution = f'<text x="1346" y="{H - 8}" font-size="9" fill="#8a8f96" text-anchor="end">Base cartografica © swisstopo</text>'
 
 tree_svg = "".join(f'<circle cx="{x}" cy="{y}" r="5.5"/>' for x, y in trees)
 park_svg = "".join(f'<polygon points="{p}"/>' for p in parkings.values())

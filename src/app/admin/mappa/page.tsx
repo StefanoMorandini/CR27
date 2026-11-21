@@ -77,7 +77,7 @@ async function MapAdmin({ searchParams }: { searchParams: SP }) {
                         <Link href={`/admin/mappa?id=${p.id}`} className="flex items-center gap-3 font-semibold hover:text-red">
                           <span
                             className={`grid size-8 shrink-0 place-items-center text-white ${p.category === "parcheggi" ? "rounded-lg" : "rounded-full"}`}
-                            style={{ background: categoryColor[p.category] }}
+                            style={{ background: categoryColor[p.category], ["--icon-bg" as string]: categoryColor[p.category] }}
                           >
                             <Icon name={p.icon} className="size-5" />
                           </span>

@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import type { MapCategory, MapPoint } from "@/lib/types";
 import { MAP_H, MAP_W, VenueBase, type MapLayer } from "./VenueBase";
 import { Marker, categoryColor } from "./markers";
 import { Icon } from "./icons";
+import { usePanZoom } from "./usePanZoom";
 
 export type MapLabels = {
   all: string;
@@ -12,34 +13,28 @@ export type MapLabels = {
   indicative: string;
   zoomIn: string;
   zoomOut: string;
+  reset: string;
+  hint: string;
   select: string;
   pedane: string;
   layerMap: string;
   layerPhoto: string;
 };
 
-const ZOOMS = [1, 1.5, 2, 3];
+const START = { x: 720, y: 560 };
 
 export function InteractiveMap({ points, labels }: { points: MapPoint[]; labels: MapLabels }) {
   const [cat, setCat] = useState<MapCategory | "all">("all");
   const [selected, setSelected] = useState<string | null>(null);
-  const [zoom, setZoom] = useState(0);
   const [layer, setLayer] = useState<MapLayer>("mappa");
-  const [viewW, setViewW] = useState(900);
-  const scroller = useRef<HTMLDivElement>(null);
+  const [touched, setTouched] = useState(false);
   const mapBox = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const pz = usePanZoom(svgRef, { mapW: MAP_W, mapH: MAP_H, minW: 170, initialCenter: START });
 
-  // larghezza visibile della mappa (per dimensionare i marker)
-  useEffect(() => {
-    const el = scroller.current;
-    if (!el) return;
-    const ro = new ResizeObserver(([e]) => setViewW(e.contentRect.width || 900));
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-  // raggio costante sullo schermo (≈14 px desktop, ≈9 px mobile) a ogni livello di zoom
-  const targetPx = viewW < 600 ? 9 : 14;
-  const markerScale = (targetPx * MAP_W) / (16 * viewW * ZOOMS[zoom]);
+  // raggio dei marker costante sullo schermo (≈14 px desktop, ≈11 px mobile)
+  const targetPx = pz.unitsPerPx > 2.2 ? 11 : 14;
+  const markerScale = (targetPx * pz.unitsPerPx) / 16;
 
   const cats = (Object.keys(labels.categories) as MapCategory[]).filter((c) => points.some((p) => p.category === c));
   const visible = points.filter((p) => cat === "all" || p.category === cat);
@@ -49,31 +44,8 @@ export function InteractiveMap({ points, labels }: { points: MapPoint[]; labels:
   function focus(p: MapPoint, scrollToMap = false) {
     setSelected(p.id);
     if (cat !== "all" && p.category !== cat) setCat("all");
-    const el = scroller.current;
-    if (el && ZOOMS[zoom] > 1) {
-      const scale = el.scrollWidth / MAP_W;
-      el.scrollTo({ left: p.x * scale - el.clientWidth / 2, top: p.y * scale - el.clientHeight / 2, behavior: "smooth" });
-    }
+    pz.flyTo({ x: p.x, y: p.y }, 480);
     if (scrollToMap) mapBox.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }
-
-  function setZoomLevel(z: number) {
-    const el = scroller.current;
-    const prev = ZOOMS[zoom];
-    const target = sel ?? null;
-    const cx = el ? (el.scrollLeft + el.clientWidth / 2) / prev : 0;
-    const cy = el ? (el.scrollTop + el.clientHeight / 2) / prev : 0;
-    setZoom(z);
-    requestAnimationFrame(() => {
-      if (!el) return;
-      const next = ZOOMS[z];
-      if (target) {
-        const scale = el.scrollWidth / MAP_W;
-        el.scrollTo({ left: target.x * scale - el.clientWidth / 2, top: target.y * scale - el.clientHeight / 2 });
-      } else {
-        el.scrollTo({ left: cx * next - el.clientWidth / 2, top: cy * next - el.clientHeight / 2 });
-      }
-    });
   }
 
   const chip = (active: boolean) =>
@@ -96,7 +68,10 @@ export function InteractiveMap({ points, labels }: { points: MapPoint[]; labels:
                     p.id === selected ? "border-red bg-red-soft/60" : "border-line bg-white hover:border-red"
                   }`}
                 >
-                  <span className="grid size-16 place-items-center rounded-full bg-red text-white shadow-md shadow-red/25 transition group-hover:scale-105">
+                  <span
+                    className="grid size-16 place-items-center rounded-full bg-red text-white shadow-md shadow-red/25 transition group-hover:scale-105"
+                    style={{ ["--icon-bg" as string]: "#df2123" }}
+                  >
                     <Icon name={p.icon} className="size-10" />
                   </span>
                   <span className="text-sm font-bold leading-tight">{p.name}</span>
@@ -137,49 +112,69 @@ export function InteractiveMap({ points, labels }: { points: MapPoint[]; labels:
             </div>
           </div>
 
-          {/* mappa */}
-          <div className="relative overflow-hidden rounded-3xl border border-line bg-stone">
-            <div ref={scroller} className="max-h-[78vh] overflow-auto overscroll-contain">
-              <svg
-                viewBox={`0 0 ${MAP_W} ${MAP_H}`}
-                style={{ width: `${ZOOMS[zoom] * 100}%` }}
-                className="block h-auto select-none"
-                role="img"
-                aria-label="Mappa dello Stadio Comunale di Bellinzona"
-              >
-                <VenueBase layer={layer} />
-                {visible.map((p) => (
-                  <g
-                    key={p.id}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={p.name}
-                    onClick={() => focus(p)}
-                    onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && focus(p)}
-                    className="cursor-pointer outline-none"
-                  >
-                    <circle cx={p.x} cy={p.y} r={26 * markerScale} fill="transparent" />
-                    <Marker p={p} active={p.id === selected} dim={!!selected && p.id !== selected} scale={markerScale} />
-                  </g>
-                ))}
-              </svg>
-            </div>
+          {/* mappa: trascina per spostare, rotellina / pizzico / doppio clic per lo zoom */}
+          <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-line bg-stone sm:aspect-[4/3] lg:aspect-[1354/1159]">
+            <svg
+              ref={svgRef}
+              viewBox={pz.viewBox}
+              preserveAspectRatio="xMidYMid meet"
+              className={`absolute inset-0 block h-full w-full select-none ${pz.zoomed ? "cursor-grab active:cursor-grabbing" : "cursor-zoom-in"}`}
+              style={{ touchAction: pz.touchAction }}
+              role="img"
+              aria-label="Mappa dello Stadio Comunale di Bellinzona"
+              {...pz.handlers}
+              onPointerDownCapture={() => setTouched(true)}
+            >
+              <VenueBase layer={layer} />
+              {visible.map((p) => (
+                <g
+                  key={p.id}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={p.name}
+                  onClick={() => !pz.wasDrag() && focus(p)}
+                  onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && focus(p)}
+                  className="cursor-pointer outline-none"
+                >
+                  <circle cx={p.x} cy={p.y} r={26 * markerScale} fill="transparent" />
+                  <Marker p={p} active={p.id === selected} dim={!!selected && p.id !== selected} scale={markerScale} />
+                </g>
+              ))}
+            </svg>
+
+            {!touched && (
+              <p className="pointer-events-none absolute inset-x-3 top-3 mx-auto w-fit rounded-full bg-ink/75 px-3 py-1.5 text-center text-xs font-semibold text-white">
+                {labels.hint}
+              </p>
+            )}
+
             <div className="absolute bottom-3 right-3 flex flex-col overflow-hidden rounded-xl border border-line bg-white shadow">
               <button
-                onClick={() => setZoomLevel(Math.min(zoom + 1, ZOOMS.length - 1))}
-                disabled={zoom === ZOOMS.length - 1}
+                onClick={() => pz.zoomAt(1.5)}
+                disabled={!pz.canZoomIn}
                 aria-label={labels.zoomIn}
                 className="grid size-10 place-items-center text-xl font-bold hover:bg-stone disabled:opacity-30"
               >
                 +
               </button>
               <button
-                onClick={() => setZoomLevel(Math.max(zoom - 1, 0))}
-                disabled={zoom === 0}
+                onClick={() => pz.zoomAt(1 / 1.5)}
+                disabled={!pz.zoomed}
                 aria-label={labels.zoomOut}
                 className="grid size-10 place-items-center border-t border-line text-xl font-bold hover:bg-stone disabled:opacity-30"
               >
                 −
+              </button>
+              <button
+                onClick={() => pz.reset()}
+                disabled={!pz.zoomed}
+                aria-label={labels.reset}
+                title={labels.reset}
+                className="grid size-10 place-items-center border-t border-line hover:bg-stone disabled:opacity-30"
+              >
+                <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
+                </svg>
               </button>
             </div>
           </div>
@@ -192,7 +187,7 @@ export function InteractiveMap({ points, labels }: { points: MapPoint[]; labels:
               <div className="flex gap-4">
                 <span
                   className={`grid size-14 shrink-0 place-items-center text-white ${sel.category === "parcheggi" ? "rounded-xl" : "rounded-full"}`}
-                  style={{ background: categoryColor[sel.category] }}
+                  style={{ background: categoryColor[sel.category], ["--icon-bg" as string]: categoryColor[sel.category] }}
                 >
                   <Icon name={sel.icon} className="size-9" />
                 </span>
@@ -222,7 +217,7 @@ export function InteractiveMap({ points, labels }: { points: MapPoint[]; labels:
                 >
                   <span
                     className={`grid size-9 shrink-0 place-items-center text-white ${p.category === "parcheggi" ? "rounded-lg" : "rounded-full"}`}
-                    style={{ background: categoryColor[p.category] }}
+                    style={{ background: categoryColor[p.category], ["--icon-bg" as string]: categoryColor[p.category] }}
                   >
                     <Icon name={p.icon} className="size-6" />
                   </span>

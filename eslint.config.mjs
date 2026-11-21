@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // strumenti Node per generare la mappa (non fanno parte del sito)
+    "scripts/**",
   ]),
 ]);
 
