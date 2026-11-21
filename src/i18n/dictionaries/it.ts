@@ -31,6 +31,12 @@ const it = {
     "chi-siamo": "Chi siamo",
     contatti: "Contatti",
   },
+  navGroups: {
+    gara: "La gara",
+    info: "Info pratiche",
+    ospitalita: "Ospitalità",
+    about: "Chi siamo",
+  },
   home: {
     eyebrow: "FTAL · Atletica ticinese",
     titleTop: "Campionati",
@@ -241,6 +247,8 @@ const it = {
   footer: {
     organizer: "Organizzato dalla Federazione Ticinese di Atletica Leggera (FTAL) su mandato di Swiss Athletics.",
     rights: "Campionati Regionali di Atletica Bellinzona 2027",
+    legal: { privacy: "Privacy", cookie: "Cookie", notes: "Note legali" },
+    updated: "Ultimo aggiornamento",
   },
   notFound: {
     title: "Falsa partenza",

@@ -1,27 +1,23 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
 import type { Dictionary } from "@/i18n/dictionaries/it";
-import { buildNav } from "@/lib/nav";
-import { NavLink } from "./NavLink";
+import { buildNavGroups } from "@/lib/nav";
+import { NavDropdown } from "./NavDropdown";
 import { MobileMenu } from "./MobileMenu";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Header({ lang, dict }: { lang: string; dict: Dictionary }) {
-  const nav = buildNav(lang, dict);
+  const groups = buildNavGroups(lang, dict);
   return (
     <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md">
       <div className="ticino-stripe h-1" />
       <div className="border-b border-line">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:h-[72px]">
           <Logo href={`/${lang}`} label={`${dict.nav.home} — ${dict.meta.shortTitle}`} />
-          <nav aria-label="Navigazione principale" className="hidden xl:block">
-            <ul className="flex items-center gap-4 2xl:gap-6">
-              {nav.map((item) => (
-                <li key={item.key}>
-                  <NavLink href={item.href} className="link-underline whitespace-nowrap py-1 text-[14px] 2xl:text-[15px] font-medium text-ink/80 hover:text-ink aria-[current=page]:text-red">
-                    {item.label}
-                  </NavLink>
-                </li>
+          <nav aria-label="Navigazione principale" className="hidden lg:block">
+            <ul className="flex items-center gap-6 xl:gap-8">
+              {groups.map((g) => (
+                <NavDropdown key={g.key} group={g} />
               ))}
             </ul>
           </nav>
@@ -35,7 +31,7 @@ export function Header({ lang, dict }: { lang: string; dict: Dictionary }) {
               {dict.common.resultsLive}
             </Link>
             <MobileMenu
-              items={nav}
+              groups={groups}
               home={{ href: `/${lang}`, label: dict.nav.home }}
               labels={{ menu: dict.common.menu, close: dict.common.close, dates: dict.common.dates, venue: dict.common.venue }}
             />

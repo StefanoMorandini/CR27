@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
-import type { NavItem } from "@/lib/nav";
+import type { NavGroup } from "@/lib/nav";
 import { NavLink } from "./NavLink";
 
 type Labels = { menu: string; close: string; dates: string; venue: string };
 
 /** Menu a schermo intero per mobile: ogni voce è una "corsia" numerata. */
-export function MobileMenu({ items, home, labels }: { items: NavItem[]; home: { href: string; label: string }; labels: Labels }) {
+export function MobileMenu({ groups, home, labels }: { groups: NavGroup[]; home: { href: string; label: string }; labels: Labels }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const [lastPath, setLastPath] = useState(pathname);
@@ -30,10 +30,9 @@ export function MobileMenu({ items, home, labels }: { items: NavItem[]; home: { 
     };
   }, [open]);
 
-  const all = [{ key: "home", ...home }, ...items];
 
   return (
-    <div className="xl:hidden">
+    <div className="lg:hidden">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
@@ -53,22 +52,36 @@ export function MobileMenu({ items, home, labels }: { items: NavItem[]; home: { 
         createPortal(
         <div id="mobile-menu" className="menu-panel fixed inset-x-0 bottom-0 top-[68px] z-30 overflow-y-auto bg-white pb-24">
           <nav aria-label={labels.menu} className="px-4 py-4">
-            <ul className="track overflow-hidden rounded-2xl bg-red py-2">
-              {all.map((item, i) => (
-                <li key={item.key} className="border-t-[3px] border-white last:border-b-[3px]">
-                  <NavLink
-                    href={item.href}
-                    exact={item.key === "home"}
-                    onClick={() => setOpen(false)}
-                    className="lane-row flex items-center gap-4 px-5 py-4 text-white aria-[current=page]:bg-red-dark"
-                  >
-                    <span className="font-display w-7 text-2xl font-black text-white">{i + 1}</span>
-                    <span className="font-display flex-1 text-xl font-extrabold uppercase">{item.label}</span>
-                    <span aria-hidden className="lane-arrow text-xl">→</span>
-                  </NavLink>
-                </li>
+            <NavLink
+              href={home.href}
+              exact
+              onClick={() => setOpen(false)}
+              className="mb-4 flex items-center justify-between rounded-2xl bg-stone px-5 py-3 font-display text-lg font-extrabold uppercase aria-[current=page]:text-red"
+            >
+              {home.label} <span aria-hidden>→</span>
+            </NavLink>
+            <div className="space-y-5">
+              {groups.map((g) => (
+                <section key={g.key}>
+                  {g.items.length > 1 && <h2 className="mb-2 px-1 text-xs font-bold uppercase tracking-[0.25em] text-muted">{g.label}</h2>}
+                  <ul className="track overflow-hidden rounded-2xl bg-red py-1.5">
+                    {g.items.map((item, i) => (
+                      <li key={item.key} className="border-t-[3px] border-white last:border-b-[3px]">
+                        <NavLink
+                          href={item.href}
+                          onClick={() => setOpen(false)}
+                          className="lane-row flex items-center gap-4 px-5 py-3.5 text-white aria-[current=page]:bg-red-dark"
+                        >
+                          {g.items.length > 1 && <span className="font-display w-6 text-xl font-black text-white">{i + 1}</span>}
+                          <span className="font-display flex-1 text-lg font-extrabold uppercase">{item.label}</span>
+                          <span aria-hidden className="lane-arrow text-xl">→</span>
+                        </NavLink>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
               ))}
-            </ul>
+            </div>
             <p className="mt-6 text-center text-sm text-muted">
               {labels.dates} · {labels.venue}
             </p>
