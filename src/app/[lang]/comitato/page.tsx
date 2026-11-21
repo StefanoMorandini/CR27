@@ -37,18 +37,18 @@ export default async function ComitatoPage() {
 
         {committee.length > 0 && (
           <section aria-labelledby="co">
-            <h2 id="co" className="reveal font-display text-3xl font-black uppercase">
+            <h2 id="co" className="reveal font-display text-xl font-black uppercase leading-tight sm:text-3xl">
               {t.committeeTitle}
             </h2>
             <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {committee.map((m) => (
-                <li key={m.id} className="reveal flex gap-4 rounded-3xl border border-line bg-white p-5">
-                  <Avatar m={m} size="size-16 text-xl" />
+                <li key={m.id} className="reveal flex gap-3 rounded-2xl border border-line bg-white p-4 sm:gap-4 sm:rounded-3xl sm:p-5">
+                  <Avatar m={m} size="size-12 text-base sm:size-16 sm:text-xl" />
                   <span className="min-w-0">
-                    <span className="block font-display text-lg font-black uppercase leading-tight">{m.full_name}</span>
+                    <span className="block break-words font-display text-base font-black uppercase leading-tight sm:text-lg">{m.full_name}</span>
                     <span className="block text-sm font-semibold text-red">{m.role}</span>
                     {m.responsibilities.length > 0 && (
-                      <span className="mt-2 block text-sm text-muted">{m.responsibilities.join(" · ")}</span>
+                      <span className="mt-1.5 block text-[13px] leading-snug text-muted sm:mt-2 sm:text-sm">{m.responsibilities.join(" · ")}</span>
                     )}
                     {m.email && (
                       <a href={`mailto:${m.email}`} className="mt-1 block text-sm text-blue underline underline-offset-4">
@@ -81,8 +81,8 @@ export default async function ComitatoPage() {
           </section>
         )}
 
-        <section id="contatti" className="reveal scroll-mt-28 rounded-3xl bg-blue p-8 text-white sm:p-10">
-          <h2 className="font-display text-3xl font-black uppercase">{t.contactTitle}</h2>
+        <section id="contatti" className="reveal scroll-mt-28 rounded-3xl bg-blue p-6 text-white sm:p-10">
+          <h2 className="font-display text-2xl font-black uppercase sm:text-3xl">{t.contactTitle}</h2>
           {settings.contact_email ? (
             <p className="mt-2 text-lg">
               {t.contactText}{" "}
