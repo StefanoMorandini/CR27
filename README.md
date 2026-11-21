@@ -5,8 +5,8 @@ Sito ufficiale dei Campionati Regionali di Atletica, **19–20 giugno 2027**, St
 | Componente | Servizio | Ruolo |
 | --- | --- | --- |
 | Codice | GitHub `StefanoMorandini/CR27` | `main` = produzione |
-| Hosting | Vercel | deploy automatico a ogni push (preview per i branch) |
-| Dati | Supabase (progetto dedicato) | programma, risultati, sponsor, pernottamento, comitato, F&B |
+| Hosting | Vercel progetto `cr-27` → https://cr-27.vercel.app | deploy automatico a ogni push (preview per i branch), funzioni a Francoforte (`fra1`) |
+| Dati | Supabase progetto `CR27` (Zurigo) | programma, risultati, sponsor, pernottamento, comitato, F&B |
 
 ## Stack
 
