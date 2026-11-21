@@ -8,6 +8,7 @@ import type {
   Faq,
   FbMenuItem,
   FbPoint,
+  MapPoint,
   ResultLink,
   ScheduleItem,
   SiteSettings,
@@ -137,4 +138,13 @@ export async function getSettings(): Promise<SiteSettings> {
     }
   }
   return out;
+}
+
+export async function getMapPoints(): Promise<MapPoint[]> {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("map");
+  const rows = await select<MapPoint>("map_points", ["sort_order"], []);
+  // numeric di Postgres arriva come stringa
+  return rows.map((p) => ({ ...p, x: Number(p.x), y: Number(p.y) }));
 }

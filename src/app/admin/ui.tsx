@@ -73,6 +73,7 @@ const messages: Record<string, string> = {
   save: "Salvataggio non riuscito. Riprova.",
   delete: "Eliminazione non riuscita.",
   upload: "Caricamento del logo non riuscito (formati: PNG, JPG, WEBP, SVG — max 5 MB).",
+  map_required: "Indica nome, categoria e posizione (clicca sulla mappa).",
   tier_in_use: "Questo tier ha ancora degli sponsor: spostali in un altro tier prima di eliminarlo.",
 };
 

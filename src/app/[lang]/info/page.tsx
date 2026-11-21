@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import { getFaqs, getSettings } from "@/lib/data";
-import { getDictionary } from "@/i18n/dictionaries";
+import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { event } from "@/lib/event";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -9,13 +10,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function InfoPage() {
-  const [dict, faqs, settings] = await Promise.all([getDictionary(), getFaqs(), getSettings()]);
+  const [dict, lang, faqs, settings] = await Promise.all([getDictionary(), getLocale(), getFaqs(), getSettings()]);
   const t = dict.pages.info;
   return (
     <>
       <PageHeader eyebrow={t.eyebrow} title={t.title} />
       <div className="mx-auto max-w-5xl px-4 py-10">
         <div className="flex flex-wrap gap-3">
+          <Link href={`/${lang}/mappa`} className="rounded-full bg-red px-6 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-red-dark">
+            {dict.nav.mappa} dell&apos;impianto →
+          </Link>
           <a href={event.mapsUrl} target="_blank" rel="noopener" className="rounded-full bg-blue px-6 py-3 font-semibold text-white transition hover:-translate-y-0.5">
             {dict.common.openInMaps} ↗
           </a>

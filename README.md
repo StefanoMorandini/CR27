@@ -42,6 +42,7 @@ src/
       programma/ risultati/ info/ food/ pernottamento/ sponsor/ comitato/
       not-found.tsx      404 localizzata
   components/
+    map/                 VenueBase (mappa vettoriale dello stadio), InteractiveMap, markers
     brand/               LogoMark (SVG del logo, animato), Logo, Skyline (Bellinzona)
     layout/              Header, MobileMenu, MobileTabBar, Footer, LanguageSwitcher
     home/Countdown.tsx   countdown a "pettorali"
@@ -60,6 +61,7 @@ supabase/migrations/     schema SQL versionato
 
 - **Sponsor**: aggiungi / modifica / elimina, logo (PNG, JPG, WEBP, SVG — max 5 MB), pubblicato o bozza
 - **Tier**: livelli sponsor con nome, ordine e visualizzazione (in evidenza, grande, medio, piccolo)
+- **Mappa**: punti della mappa interattiva (`/it/mappa`): clic sulla mappa per posizionarli, categoria, descrizione, "posizione verificata" o indicativa
 - **Link e risultati**: risultati live, pagina da incorporare, iscrizioni, email di contatto, link a risultati / liste di partenza / documenti
 - **Password**: cambio password; "Password dimenticata" dalla pagina di accesso
 
@@ -110,7 +112,7 @@ registrate in `supabase_migrations.schema_migrations`). Nuove modifiche: aggiung
 Tabelle principali:
 
 `schedule_items` · `result_links` · `announcements` · `sponsors` · `sponsor_tiers` · `accommodations` ·
-`committee_members` · `fb_points` · `fb_menu_items` · `faqs` · `site_settings` · `admins`
+`committee_members` · `map_points` · `fb_points` · `fb_menu_items` · `faqs` · `site_settings` · `admins`
 
 Sicurezza (RLS): chiunque legge solo i record `published`; solo gli utenti presenti in `admins` possono scrivere.
 I loghi sono nel bucket Storage pubblico `media` (scrittura solo admin).

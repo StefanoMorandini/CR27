@@ -24,7 +24,7 @@ export default async function Home() {
     getSponsorTiers(),
   ]);
   const h = dict.home;
-  const lanes = (["programma", "risultati", "info", "food", "pernottamento", "sponsor"] as const).map((key) => ({
+  const lanes = (["programma", "risultati", "info", "mappa", "food", "pernottamento", "sponsor"] as const).map((key) => ({
     key,
     href: `/${lang}/${key}`,
     title: dict.nav[key],

@@ -189,3 +189,43 @@ export async function deleteResultLink(formData: FormData) {
   updateTag("results");
   back("/admin/link", "ok", "deleted");
 }
+
+// ---------------------------------------------------------------- mappa
+const mapCategories = ["gare", "atleti", "servizi", "parcheggi"];
+
+export async function saveMapPoint(formData: FormData) {
+  const { sb } = await requireAdmin();
+  const id = str(formData, "id");
+  const from = id ? `/admin/mappa?id=${id}` : "/admin/mappa";
+  const name = str(formData, "name");
+  const category = str(formData, "category");
+  const x = Number.parseFloat(str(formData, "x"));
+  const y = Number.parseFloat(str(formData, "y"));
+  if (!name || !mapCategories.includes(category) || !Number.isFinite(x) || !Number.isFinite(y)) {
+    back(from, "error", "map_required");
+  }
+  const row = {
+    name,
+    category,
+    description: optional(formData, "description"),
+    x: Math.min(1000, Math.max(0, Math.round(x * 10) / 10)),
+    y: Math.min(570, Math.max(0, Math.round(y * 10) / 10)),
+    verified: bool(formData, "verified"),
+    sort_order: int(formData, "sort_order"),
+    published: bool(formData, "published"),
+  };
+  const { error } = id
+    ? await sb.from("map_points").update(row).eq("id", id)
+    : await sb.from("map_points").insert(row);
+  if (error) back(from, "error", "save");
+  updateTag("map");
+  back(from, "ok", id ? "updated" : "created");
+}
+
+export async function deleteMapPoint(formData: FormData) {
+  const { sb } = await requireAdmin();
+  const { error } = await sb.from("map_points").delete().eq("id", str(formData, "id"));
+  if (error) back("/admin/mappa", "error", "delete");
+  updateTag("map");
+  back("/admin/mappa", "ok", "deleted");
+}

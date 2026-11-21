@@ -120,3 +120,17 @@ export interface SiteSettings {
   results_embed_url: string;
   contact_email: string;
 }
+
+export type MapCategory = "gare" | "atleti" | "servizi" | "parcheggi";
+
+export interface MapPoint {
+  id: string;
+  name: string;
+  category: MapCategory;
+  description: string | null;
+  x: number;
+  y: number;
+  verified: boolean;
+  sort_order: number;
+  published: boolean;
+}
