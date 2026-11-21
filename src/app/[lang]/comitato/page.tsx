@@ -12,7 +12,7 @@ export default async function ComitatoPage() {
   const t = dict.pages.comitato;
   return (
     <>
-      <PageHeader eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
+      <PageHeader eyebrow={t.eyebrow} title={t.title} />
       <div className="mx-auto max-w-5xl space-y-12 px-4 py-10">
         {members.length === 0 ? (
           <EmptyState>{t.empty}</EmptyState>

@@ -16,7 +16,7 @@ export default async function RisultatiPage() {
 
   return (
     <>
-      <PageHeader eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
+      <PageHeader eyebrow={t.eyebrow} title={t.title} />
       <div className="mx-auto max-w-5xl space-y-12 px-4 py-10">
         {settings.results_live_url && (
           <a

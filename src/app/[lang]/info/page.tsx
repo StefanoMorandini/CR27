@@ -13,7 +13,7 @@ export default async function InfoPage() {
   const t = dict.pages.info;
   return (
     <>
-      <PageHeader eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
+      <PageHeader eyebrow={t.eyebrow} title={t.title} />
       <div className="mx-auto max-w-5xl px-4 py-10">
         <div className="flex flex-wrap gap-3">
           <a href={event.mapsUrl} target="_blank" rel="noopener" className="rounded-full bg-blue px-6 py-3 font-semibold text-white transition hover:-translate-y-0.5">

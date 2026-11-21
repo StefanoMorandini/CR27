@@ -42,7 +42,7 @@ src/
       programma/ risultati/ info/ food/ pernottamento/ sponsor/ comitato/
       not-found.tsx      404 localizzata
   components/
-    brand/               LogoMark (SVG del logo, animato), Logo, Mountains
+    brand/               LogoMark (SVG del logo, animato), Logo, Skyline (Bellinzona)
     layout/              Header, MobileMenu, MobileTabBar, Footer, LanguageSwitcher
     home/Countdown.tsx   countdown a "pettorali"
   lib/

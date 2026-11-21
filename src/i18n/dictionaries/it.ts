@@ -30,11 +30,11 @@ const it = {
     contatti: "Contatti",
   },
   home: {
-    eyebrow: "Atletica leggera · Ticino",
+    eyebrow: "FTAL · Atletica ticinese",
     titleTop: "Campionati",
     titleBottom: "Regionali",
     place: "Bellinzona",
-    lead: "Due giorni di gare allo Stadio Comunale, ai piedi dei tre castelli.",
+    lead: "Stadio Comunale di Bellinzona",
     ctaProgram: "Vedi il programma",
     ctaInfo: "Come arrivare",
     countdownLabel: "Al via tra",
@@ -42,7 +42,6 @@ const it = {
     live: "Gare in corso",
     finished: "Grazie a tutti, arrivederci!",
     lanesTitle: "Scegli la tua corsia",
-    lanesIntro: "Tutto quello che serve, a portata di pollice.",
     lanes: {
       programma: "Orari di tutte le gare, giorno per giorno.",
       risultati: "Risultati live, liste di partenza e classifiche.",
@@ -52,12 +51,11 @@ const it = {
       sponsor: "Chi rende possibile l'evento.",
     },
     daysTitle: "Due giorni, una pista",
-    day1: { name: "Sabato", date: "19 giugno 2027", text: "Prima giornata di gare. Programma dettagliato in preparazione." },
-    day2: { name: "Domenica", date: "20 giugno 2027", text: "Seconda giornata e finali. Programma dettagliato in preparazione." },
+    day1: { name: "Sabato", date: "19 giugno 2027" },
+    day2: { name: "Domenica", date: "20 giugno 2027" },
     newsTitle: "Comunicazioni",
     cityTitle: "Tre castelli, tre corsie",
-    cityText:
-      "Il logo dei Regionali 2027 unisce i tre castelli di Bellinzona — Castelgrande, Montebello e Sasso Corbaro, patrimonio mondiale UNESCO — con le corsie della pista. La capitale del Canton Ticino accoglie due giorni di atletica.",
+    cityText: "I castelli di Bellinzona, patrimonio mondiale UNESCO, e le corsie della pista.",
     castles: ["Castelgrande", "Montebello", "Sasso Corbaro"],
     sponsorsTitle: "Con il sostegno di",
   },
@@ -71,7 +69,6 @@ const it = {
     risultati: {
       eyebrow: "Live",
       title: "Risultati",
-      intro: "Risultati in tempo reale, liste di partenza e classifiche ufficiali.",
       liveCta: "Apri la pagina ufficiale dei risultati",
       embedFallback: "La finestra non si carica?",
       embedOpen: "Apri i risultati in una nuova scheda",
@@ -81,7 +78,6 @@ const it = {
     info: {
       eyebrow: "Stadio Comunale di Bellinzona",
       title: "Info pratiche",
-      intro: "Come arrivare, dove parcheggiare e cosa sapere prima delle gare.",
       registration: "Iscrizioni",
       faqTitle: "Domande frequenti",
       blocks: [
@@ -128,7 +124,6 @@ const it = {
     sponsor: {
       eyebrow: "Grazie",
       title: "Sponsor e partner",
-      intro: "Le aziende e le istituzioni che sostengono i Campionati Regionali 2027.",
       tiers: {
         main: "Main sponsor",
         gold: "Gold",
@@ -146,7 +141,6 @@ const it = {
     comitato: {
       eyebrow: "Chi siamo",
       title: "Comitato",
-      intro: "Il comitato d'organizzazione dei Campionati Regionali di Atletica 2027 a Bellinzona.",
       empty: "La composizione del comitato sarà pubblicata prossimamente.",
       contactTitle: "Contatti",
       contactText: "Scrivici a",

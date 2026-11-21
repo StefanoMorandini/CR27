@@ -23,7 +23,7 @@ export default async function SponsorPage() {
   const t = dict.pages.sponsor;
   return (
     <>
-      <PageHeader eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
+      <PageHeader eyebrow={t.eyebrow} title={t.title} />
       <div className="mx-auto max-w-5xl space-y-12 px-4 py-10">
         {tiers.map(({ tier, size }) => {
           const list = sponsors.filter((s) => s.tier === tier);

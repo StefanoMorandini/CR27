@@ -125,16 +125,15 @@ body {
   }
 }
 
-/* Montagne sullo sfondo: lento movimento orizzontale */
-.drift {
-  animation: drift 40s ease-in-out infinite alternate;
+/* Bandierine sulle torri dello skyline */
+.flag {
+  transform-box: fill-box;
+  transform-origin: 0 50%;
+  animation: flag 1.8s ease-in-out infinite alternate;
 }
-.drift-slow {
-  animation: drift 60s ease-in-out infinite alternate-reverse;
-}
-@keyframes drift {
+@keyframes flag {
   to {
-    transform: translateX(-4%);
+    transform: scaleX(0.72) skewY(-6deg);
   }
 }
 

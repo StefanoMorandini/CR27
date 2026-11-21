@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { LogoMark } from "@/components/brand/LogoMark";
-import { Mountains } from "@/components/brand/Mountains";
+import { Skyline } from "@/components/brand/Skyline";
 import { Countdown } from "@/components/home/Countdown";
 import { getAnnouncements, getSponsors } from "@/lib/data";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
@@ -33,8 +33,8 @@ export default async function Home() {
     <>
       {/* ------------------------------------------------------------ HERO */}
       <section className="relative overflow-hidden bg-white">
-        <Mountains className="pointer-events-none absolute inset-x-0 bottom-0 h-40 w-[110%] sm:h-56" />
-        <div className="relative mx-auto flex max-w-5xl flex-col items-center px-4 pb-14 pt-6 text-center sm:pb-20 sm:pt-10">
+        <Skyline className="pointer-events-none absolute bottom-0 left-1/2 h-auto w-[200%] max-w-none -translate-x-[54%] sm:w-[150%] sm:-translate-x-1/2 lg:w-full" />
+        <div className="relative mx-auto flex max-w-5xl flex-col items-center px-4 pb-40 pt-6 text-center sm:pb-44 sm:pt-10 lg:pb-48">
           <p className="fade-up flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.3em] text-blue sm:text-xs" style={d("1.2s")}>
             <span className="h-0.5 w-6 bg-red" aria-hidden />
             {h.eyebrow}
@@ -109,12 +109,9 @@ export default async function Home() {
 
       {/* ---------------------------------------------------- CORSIE */}
       <section className="mx-auto max-w-5xl px-4 pt-16 sm:pt-24" aria-labelledby="lanes-title">
-        <div className="reveal flex flex-wrap items-end justify-between gap-2">
-          <h2 id="lanes-title" className="font-display text-3xl font-black uppercase sm:text-5xl">
-            {h.lanesTitle}
-          </h2>
-          <p className="text-muted">{h.lanesIntro}</p>
-        </div>
+        <h2 id="lanes-title" className="reveal font-display text-3xl font-black uppercase sm:text-5xl">
+          {h.lanesTitle}
+        </h2>
         <ul className="reveal mt-8 overflow-hidden rounded-3xl bg-red shadow-xl shadow-red/20">
           {lanes.map((l, i) => (
             <li key={l.key} className="border-b-2 border-dashed border-white/35 last:border-0">
@@ -153,7 +150,6 @@ export default async function Home() {
               </span>
               <span className="relative block text-sm font-bold uppercase tracking-[0.25em] text-blue">{day.name}</span>
               <span className="font-display relative mt-1 block text-3xl font-black uppercase">{day.date}</span>
-              <span className="relative mt-3 block max-w-xs text-muted">{day.text}</span>
             </Link>
           ))}
         </div>
