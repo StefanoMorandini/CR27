@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens — palette provvisoria (rosso pista + blu Ticino).
+ * Da allineare ai colori del logo ufficiale.
+ */
+:root {
+  --brand: #d7261e;
+  --brand-dark: #a91b15;
+  --ink: #0e1b2c;
+  --navy: #13294b;
+  --sky: #1d4e89;
+  --sand: #f6f3ee;
+  --line: #e4ded4;
+  --muted: #5b6573;
+  --ok: #1f7a4d;
+  --warn: #b45309;
+}
+
+@theme inline {
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-ink: var(--ink);
+  --color-navy: var(--navy);
+  --color-sky: var(--sky);
+  --color-sand: var(--sand);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-barlow);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: #ffffff;
+  color: var(--ink);
+}
+
+/* Spazio per la tab bar fissa su mobile (incl. safe area iPhone) */
+.pb-tabbar {
+  padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+}
+@media (min-width: 1024px) {
+  .pb-tabbar {
+    padding-bottom: 0;
+  }
+}
+
+/* Motivo "corsie" per gli sfondi hero */
+.lanes {
+  background-image: repeating-linear-gradient(
+    100deg,
+    transparent 0 46px,
+    rgb(255 255 255 / 0.07) 46px 48px
+  );
+}
+
+:focus-visible {
+  outline: 3px solid var(--sky);
+  outline-offset: 2px;
+}
