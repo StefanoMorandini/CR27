@@ -42,7 +42,7 @@ src/
       programma/ risultati/ info/ food/ pernottamento/ sponsor/ comitato/
       not-found.tsx      404 localizzata
   components/
-    map/                 VenueBase (mappa vettoriale dello stadio), InteractiveMap, markers
+    map/                 VenueBase (base mappa/foto), InteractiveMap, markers, icons (pittogrammi)
     brand/               LogoMark (SVG del logo, animato), Logo, Skyline (Bellinzona)
     layout/              Header, MobileMenu, MobileTabBar, Footer, LanguageSwitcher
     home/Countdown.tsx   countdown a "pettorali"
@@ -74,6 +74,14 @@ Sicurezza:
 
 Per aggiungere un altro admin: creare l'utente in Supabase → Authentication → Users, poi
 `insert into public.admins (user_id, email) values ('<uuid>', '<email>');`
+
+## Mappa dell'impianto
+
+- Base vettoriale `public/map/base.svg`, generata da `scripts/map/build_base.py` con dati
+  swisstopo (carta nazionale vettorializzata + rilievo su SWISSIMAGE): `python3 scripts/map/build_base.py`
+- Foto aerea `public/map/swissimage.webp` (SWISSIMAGE © swisstopo, open data: citare la fonte)
+- Coordinate dei punti: viewBox 0 0 1354 920, nord in alto (~0,41 m per unità)
+- Punti e simboli gestiti in `/admin/mappa` (tabella `map_points`)
 
 ## Multilingua
 

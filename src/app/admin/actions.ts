@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/admin/auth";
 import { event } from "@/lib/event";
+import { ICON_KEYS } from "@/components/map/icons";
 
 // ---------------------------------------------------------------- helpers
 const str = (f: FormData, k: string) => {
@@ -204,12 +205,15 @@ export async function saveMapPoint(formData: FormData) {
   if (!name || !mapCategories.includes(category) || !Number.isFinite(x) || !Number.isFinite(y)) {
     back(from, "error", "map_required");
   }
+  const iconValue = str(formData, "icon");
+  const icon = (ICON_KEYS as readonly string[]).includes(iconValue) ? iconValue : "punto";
   const row = {
     name,
     category,
+    icon,
     description: optional(formData, "description"),
-    x: Math.min(1000, Math.max(0, Math.round(x * 10) / 10)),
-    y: Math.min(570, Math.max(0, Math.round(y * 10) / 10)),
+    x: Math.min(1354, Math.max(0, Math.round(x * 10) / 10)),
+    y: Math.min(920, Math.max(0, Math.round(y * 10) / 10)),
     verified: bool(formData, "verified"),
     sort_order: int(formData, "sort_order"),
     published: bool(formData, "published"),

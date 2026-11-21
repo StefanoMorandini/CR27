@@ -131,6 +131,7 @@ export interface MapPoint {
   x: number;
   y: number;
   verified: boolean;
+  icon: string;
   sort_order: number;
   published: boolean;
 }
