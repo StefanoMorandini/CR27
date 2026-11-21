@@ -28,23 +28,48 @@ Senza `.env.local` il sito funziona comunque con un programma di esempio (`src/l
 
 ```
 src/
-  app/                 pagine (una cartella = una rotta)
-    page.tsx           home: countdown, comunicazioni, accesso rapido, sponsor
-    programma/         orari per giorno, filtri categoria/disciplina, stato live
-    risultati/         link live + embed iframe (Swiss Athletics / timing)
-    info/              stadio, trasporti, parcheggi, FAQ
-    food/              punti di ristoro e menu F&B
-    pernottamento/     alloggi e convenzioni
-    sponsor/           sponsor per livello
-    comitato/          comitato e contatti
-    menu/              menu completo su mobile
-  components/          Header, MobileTabBar (mobile), Footer, ScheduleView…
+  proxy.ts               reindirizza ogni URL senza lingua → /it/...
+  i18n/
+    config.ts            lingue attive (oggi solo "it"), lingua predefinita
+    dictionaries/it.ts   tutti i testi dell'interfaccia in italiano
+    dictionaries/index.ts getDictionary() / getLocale() (lato server)
+  app/
+    globals.css          design tokens e animazioni
+    icon.svg             favicon (marchio)
+    [lang]/              tutte le pagine, con prefisso lingua
+      layout.tsx         layout radice (html lang, font, header, footer)
+      page.tsx           home: logo animato, countdown, corsie, giorni, Bellinzona
+      programma/ risultati/ info/ food/ pernottamento/ sponsor/ comitato/
+      not-found.tsx      404 localizzata
+  components/
+    brand/               LogoMark (SVG del logo, animato), Logo, Mountains
+    layout/              Header, MobileMenu, MobileTabBar, Footer, LanguageSwitcher
+    home/Countdown.tsx   countdown a "pettorali"
   lib/
-    data.ts            accesso ai dati (cache + tag per l'invalidazione)
-    site.ts            dati fissi dell'evento e navigazione
-    types.ts           tipi delle tabelle
-supabase/migrations/   schema SQL versionato
+    data.ts              accesso ai dati (cache + tag per l'invalidazione)
+    event.ts             date e dati fissi dell'evento
+supabase/migrations/     schema SQL versionato
 ```
+
+## Multilingua
+
+Il sito è già strutturato per più lingue (URL `/it/...`, `/de/...`), ma oggi è attivo solo l'italiano.
+Per aggiungere una lingua:
+
+1. aggiungere il codice in `src/i18n/config.ts` (`locales`)
+2. creare `src/i18n/dictionaries/<codice>.ts` con lo stesso tipo di `it.ts` (TypeScript segnala le traduzioni mancanti)
+3. registrarlo in `src/i18n/dictionaries/index.ts`
+
+Il selettore lingua nell'header compare automaticamente quando le lingue sono più di una.
+I contenuti del database (programma, sponsor, ecc.) sono per ora solo in italiano.
+
+## Brand
+
+- Logo: `public/logo-cr27.jpg` (originale) e `src/components/brand/paths.ts` (vettoriale, tracciato dall'originale).
+- Colori: rosso `#DF2123` (logo), blu Ticino `#0B4F9C` come accento, bianco.
+- Font: Archivo (titoli larghi, come il logo) + Inter (testo).
+- Animazioni: corsie che si disegnano, castelli che emergono, "corridori" sulle corsie, comparsa allo scroll.
+  Tutte disattivate se l'utente ha impostato "riduci movimento".
 
 ## Dati e cache
 
