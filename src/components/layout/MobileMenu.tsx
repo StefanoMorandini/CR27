@@ -33,7 +33,7 @@ export function MobileMenu({ items, home, labels }: { items: NavItem[]; home: { 
   const all = [{ key: "home", ...home }, ...items];
 
   return (
-    <div className="lg:hidden">
+    <div className="xl:hidden">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}

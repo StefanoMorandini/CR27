@@ -20,7 +20,7 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
       <body className="min-h-full bg-stone font-sans">
         <div className="ticino-stripe h-1" />
         <header className="border-b border-line bg-white">
-          <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-3">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3">
             <Link href="/admin" className="flex items-center gap-3">
               <LogoMark className="h-8 w-auto text-red" />
               <span className="font-display text-sm font-black uppercase leading-tight">
@@ -33,7 +33,7 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
             </Suspense>
           </div>
         </header>
-        <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
+        <main className="mx-auto max-w-7xl px-4 py-8">{children}</main>
       </body>
     </html>
   );

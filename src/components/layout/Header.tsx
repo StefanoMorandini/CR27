@@ -14,11 +14,11 @@ export function Header({ lang, dict }: { lang: string; dict: Dictionary }) {
       <div className="border-b border-line">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:h-[72px]">
           <Logo href={`/${lang}`} label={`${dict.nav.home} — ${dict.meta.shortTitle}`} />
-          <nav aria-label="Navigazione principale" className="hidden lg:block">
+          <nav aria-label="Navigazione principale" className="hidden xl:block">
             <ul className="flex items-center gap-5 xl:gap-7">
               {nav.map((item) => (
                 <li key={item.key}>
-                  <NavLink href={item.href} className="link-underline py-1 text-[15px] font-medium text-ink/80 hover:text-ink aria-[current=page]:text-red">
+                  <NavLink href={item.href} className="link-underline whitespace-nowrap py-1 text-[15px] font-medium text-ink/80 hover:text-ink aria-[current=page]:text-red">
                     {item.label}
                   </NavLink>
                 </li>
@@ -29,7 +29,7 @@ export function Header({ lang, dict }: { lang: string; dict: Dictionary }) {
             <LanguageSwitcher current={lang} label={dict.common.language} />
             <Link
               href={`/${lang}/risultati`}
-              className="hidden items-center gap-2 rounded-full bg-red px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-dark sm:inline-flex"
+              className="hidden items-center gap-2 whitespace-nowrap rounded-full bg-red px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-dark sm:inline-flex"
             >
               <span className="size-2 rounded-full bg-white" aria-hidden />
               {dict.common.resultsLive}

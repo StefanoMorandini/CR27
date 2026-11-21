@@ -21,7 +21,7 @@ const url = (f: FormData, k: string) => {
 };
 
 function back(path: string, key: "ok" | "error", code: string): never {
-  redirect(`${path}?${key}=${code}`);
+  redirect(`${path}${path.includes("?") ? "&" : "?"}${key}=${code}`);
 }
 
 // ---------------------------------------------------------------- auth
@@ -65,7 +65,7 @@ export async function saveSponsor(formData: FormData) {
   const id = str(formData, "id");
   const name = str(formData, "name");
   const tier_id = str(formData, "tier_id");
-  const from = id ? `/admin/sponsor/${id}` : "/admin/sponsor";
+  const from = id ? `/admin/sponsor?id=${id}` : "/admin/sponsor?new=1";
   if (!name || !tier_id) back(from, "error", "required");
 
   let logo_url: string | null | undefined;
@@ -91,7 +91,18 @@ export async function saveSponsor(formData: FormData) {
   if (error) back(from, "error", "save");
 
   updateTag("sponsors");
-  back("/admin/sponsor", "ok", id ? "updated" : "created");
+  back(id ? `/admin/sponsor?id=${id}` : "/admin/sponsor", "ok", id ? "updated" : "created");
+}
+
+export async function toggleSponsor(formData: FormData) {
+  const { sb } = await requireAdmin();
+  const { error } = await sb
+    .from("sponsors")
+    .update({ published: str(formData, "published") !== "true" })
+    .eq("id", str(formData, "id"));
+  if (error) back("/admin/sponsor", "error", "save");
+  updateTag("sponsors");
+  back("/admin/sponsor", "ok", "updated");
 }
 
 export async function deleteSponsor(formData: FormData) {
@@ -110,21 +121,22 @@ export async function saveTier(formData: FormData) {
   const id = str(formData, "id");
   const name = str(formData, "name");
   const display = str(formData, "display");
-  if (!name || !displays.includes(display)) back("/admin/tier", "error", "required");
+  const from = id ? `/admin/tier?id=${id}` : "/admin/tier";
+  if (!name || !displays.includes(display)) back(from, "error", "required");
   const row = { name, display, sort_order: int(formData, "sort_order") };
   const { error } = id
     ? await sb.from("sponsor_tiers").update(row).eq("id", id)
     : await sb.from("sponsor_tiers").insert(row);
-  if (error) back("/admin/tier", "error", "save");
+  if (error) back(from, "error", "save");
   updateTag("sponsors");
-  back("/admin/tier", "ok", id ? "updated" : "created");
+  back(from, "ok", id ? "updated" : "created");
 }
 
 export async function deleteTier(formData: FormData) {
   const { sb } = await requireAdmin();
   const { error } = await sb.from("sponsor_tiers").delete().eq("id", str(formData, "id"));
   // 23503 = esistono sponsor collegati a questo tier
-  if (error) back("/admin/tier", "error", error.code === "23503" ? "tier_in_use" : "delete");
+  if (error) back(`/admin/tier?id=${str(formData, "id")}`, "error", error.code === "23503" ? "tier_in_use" : "delete");
   updateTag("sponsors");
   back("/admin/tier", "ok", "deleted");
 }
