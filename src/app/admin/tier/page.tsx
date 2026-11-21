@@ -4,7 +4,7 @@ import { requireAdmin } from "@/lib/admin/auth";
 import type { SponsorTier } from "@/lib/types";
 import { deleteTier, saveTier } from "../actions";
 import { ConfirmButton } from "../ConfirmButton";
-import { Field, Flash, Loading, PageTitle, Submit, inputCls } from "../ui";
+import { Check, Field, Flash, Loading, PageTitle, Submit, inputCls } from "../ui";
 
 export const metadata = { title: "Tier" };
 
@@ -61,6 +61,7 @@ async function TierAdmin({ searchParams }: { searchParams: SP }) {
                 <th className="px-5 py-2.5 text-center font-bold">Ordine</th>
                 <th className="px-3 py-2.5 font-bold">Nome</th>
                 <th className="px-3 py-2.5 font-bold">Visualizzazione</th>
+                <th className="px-3 py-2.5 font-bold">Pacchetto</th>
                 <th className="px-3 py-2.5 text-center font-bold">Sponsor</th>
                 <th className="px-5 py-2.5" />
               </tr>
@@ -85,6 +86,13 @@ async function TierAdmin({ searchParams }: { searchParams: SP }) {
                           <span className="block text-xs text-muted">{d?.hint}</span>
                         </span>
                       </span>
+                    </td>
+                    <td className="px-3 py-3 text-xs">
+                      <span className="block font-semibold">
+                        {t.price_chf != null ? `CHF ${Number(t.price_chf).toLocaleString("de-CH")}` : "—"}
+                        {t.price_chf != null && !t.price_public && <span className="font-normal text-muted"> (non pubblico)</span>}
+                      </span>
+                      <span className="text-muted">{t.benefits?.length ?? 0} prestazioni</span>
                     </td>
                     <td className="px-3 py-3 text-center">
                       <Link href={`/admin/sponsor?tier=${t.id}`} className="font-semibold text-blue hover:underline">
@@ -138,6 +146,18 @@ async function TierAdmin({ searchParams }: { searchParams: SP }) {
           </fieldset>
           <Field label="Ordine" hint="Numero più basso = mostrato prima.">
             <input name="sort_order" type="number" defaultValue={selected?.sort_order ?? (list.at(-1)?.sort_order ?? 0) + 10} className={inputCls} />
+          </Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Prezzo CHF">
+              <input name="price_chf" inputMode="decimal" defaultValue={selected?.price_chf ?? ""} className={inputCls} />
+            </Field>
+            <Field label="Max sponsor">
+              <input name="max_sponsors" type="number" min={1} defaultValue={selected?.max_sponsors ?? ""} className={inputCls} />
+            </Field>
+          </div>
+          <Check name="price_public" label="Mostra il prezzo sul sito" defaultChecked={selected?.price_public ?? false} />
+          <Field label="Prestazioni del pacchetto" hint="Una per riga. Compaiono sul sito (pagina Sponsor) e nella lettera di conferma.">
+            <textarea name="benefits" rows={5} defaultValue={selected?.benefits?.join("\n") ?? ""} className={inputCls} />
           </Field>
           <div className="flex flex-wrap items-center gap-3 pt-1">
             <Submit>{selected ? "Salva modifiche" : "Aggiungi tier"}</Submit>

@@ -1,9 +1,9 @@
 import type { Dictionary } from "@/i18n/dictionaries/it";
 
-export type NavKey = "programma" | "risultati" | "info" | "mappa" | "food" | "pernottamento" | "sponsor" | "comitato";
+export type NavKey = "programma" | "risultati" | "info" | "mappa" | "food" | "pernottamento" | "sponsor" | "chi-siamo" | "comitato";
 
 /** Ordine delle sezioni nel menu. Le etichette arrivano dal dizionario. */
-export const navKeys: NavKey[] = ["programma", "risultati", "info", "mappa", "food", "pernottamento", "sponsor", "comitato"];
+export const navKeys: NavKey[] = ["programma", "risultati", "info", "mappa", "food", "pernottamento", "sponsor", "chi-siamo", "comitato"];
 
 export type NavItem = { key: NavKey; href: string; label: string };
 

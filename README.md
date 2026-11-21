@@ -62,6 +62,10 @@ supabase/migrations/     schema SQL versionato
 - **Sponsor**: aggiungi / modifica / elimina, logo (PNG, JPG, WEBP, SVG — max 5 MB), pubblicato o bozza
 - **Tier**: livelli sponsor con nome, ordine e visualizzazione (in evidenza, grande, medio, piccolo)
 - **Mappa**: punti della mappa interattiva (`/it/mappa`): clic sulla mappa per posizionarli, categoria, descrizione, "posizione verificata" o indicativa
+- **Sponsor → contatti e accordo**: indirizzo, contatto, importo, stato (tabella `sponsor_contacts`, solo admin) e **conferma di sponsorizzazione** A4 (`/admin/sponsor/<id>/lettera` → Stampa / Salva PDF)
+- **Comitato**: persone, ruoli, responsabilità, foto
+- **Statistiche**: dati anonimi 2025 e requisiti Swiss Athletics per il sito
+- **Impostazioni**: mittente, firmatario, IBAN delle lettere (tabella `private_settings`, solo admin)
 - **Link e risultati**: risultati live, pagina da incorporare, iscrizioni, email di contatto, link a risultati / liste di partenza / documenti
 - **Password**: cambio password; "Password dimenticata" dalla pagina di accesso
 

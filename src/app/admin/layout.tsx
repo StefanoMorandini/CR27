@@ -17,9 +17,9 @@ export const metadata: Metadata = {
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
     <html lang="it" className={`${inter.variable} ${archivo.variable} h-full antialiased`}>
-      <body className="min-h-full bg-stone font-sans">
-        <div className="ticino-stripe h-1" />
-        <header className="border-b border-line bg-white">
+      <body className="min-h-full bg-stone font-sans print:bg-white">
+        <div className="ticino-stripe h-1 print:hidden" />
+        <header className="border-b border-line bg-white print:hidden">
           <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3">
             <Link href="/admin" className="flex items-center gap-3">
               <LogoMark className="h-8 w-auto text-red" />
@@ -33,7 +33,7 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
             </Suspense>
           </div>
         </header>
-        <main className="mx-auto max-w-7xl px-4 py-8">{children}</main>
+        <main className="mx-auto max-w-7xl px-4 py-8 print:max-w-none print:p-0">{children}</main>
       </body>
     </html>
   );

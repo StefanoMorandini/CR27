@@ -15,10 +15,10 @@ export function Header({ lang, dict }: { lang: string; dict: Dictionary }) {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:h-[72px]">
           <Logo href={`/${lang}`} label={`${dict.nav.home} — ${dict.meta.shortTitle}`} />
           <nav aria-label="Navigazione principale" className="hidden xl:block">
-            <ul className="flex items-center gap-5 xl:gap-7">
+            <ul className="flex items-center gap-4 2xl:gap-6">
               {nav.map((item) => (
                 <li key={item.key}>
-                  <NavLink href={item.href} className="link-underline whitespace-nowrap py-1 text-[15px] font-medium text-ink/80 hover:text-ink aria-[current=page]:text-red">
+                  <NavLink href={item.href} className="link-underline whitespace-nowrap py-1 text-[14px] 2xl:text-[15px] font-medium text-ink/80 hover:text-ink aria-[current=page]:text-red">
                     {item.label}
                   </NavLink>
                 </li>

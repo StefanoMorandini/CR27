@@ -81,7 +81,8 @@ export async function getSponsorTiers(): Promise<SponsorTier[]> {
     console.error("[data] sponsor_tiers:", error.message);
     return [];
   }
-  return data as SponsorTier[];
+  // numeric di Postgres arriva come stringa
+  return (data as SponsorTier[]).map((t) => ({ ...t, price_chf: t.price_chf == null ? null : Number(t.price_chf) }));
 }
 
 export async function getAccommodations(): Promise<Accommodation[]> {

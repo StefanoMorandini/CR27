@@ -28,6 +28,7 @@ const it = {
     pernottamento: "Pernottamento",
     sponsor: "Sponsor",
     comitato: "Comitato",
+    "chi-siamo": "Chi siamo",
     contatti: "Contatti",
   },
   home: {
@@ -152,6 +153,59 @@ const it = {
       becomeText:
         "Vuoi associare il tuo marchio a due giorni di atletica a Bellinzona? Contatta il comitato per ricevere il dossier sponsor.",
       becomeCta: "Contattaci",
+      whyTitle: "Perché sostenerci",
+      whyText:
+        "Sostenere i Campionati Regionali significa associare il proprio marchio allo sport giovanile e alle nuove generazioni, con una visibilità concreta su un pubblico che arriva da tutta la Svizzera orientale: giovani atlete e atleti, famiglie, allenatori e appassionati.",
+      figuresTitle: "L'edizione 2025 in cifre",
+      figures: {
+        entries: "iscrizioni gara",
+        athletes: "atlete e atleti",
+        clubs: "società sportive",
+        cantons: "cantoni rappresentati",
+        outside: "delle iscrizioni da fuori Ticino",
+        women: "delle iscrizioni femminili",
+        audience: "persone sul posto (stima)",
+        volunteers: "volontari",
+      },
+      cantonsTitle: "Da dove arrivano gli atleti",
+      cantonsNote: "Iscrizioni gara 2025 per cantone della società.",
+      packagesTitle: "Pacchetti di sponsorizzazione",
+      packagesNote: "Le condizioni dell'edizione 2027 sono in definizione: contattaci per un'offerta.",
+      maxSponsors: "massimo {n} sponsor",
+      onRequest: "Su richiesta",
+      source: "Fonti: iscrizioni Swiss Athletics 2025, comunicato stampa e dossier sponsor 2025.",
+    },
+    "chi-siamo": {
+      eyebrow: "Campionati Regionali 2027",
+      title: "Chi siamo",
+      intro:
+        "I Campionati Regionali di atletica leggera della Svizzera orientale riuniscono ogni anno le migliori giovani promesse delle categorie U14, U16 e U18.",
+      whatTitle: "L'evento",
+      whatText: [
+        "Due giornate di gare in cui atlete e atleti tra i 12 e i 17 anni si contendono i titoli regionali nelle discipline di corsa, salti e lanci.",
+        "Per le categorie giovanili è il primo grande appuntamento della stagione all'aperto: per molti U18 è l'occasione per ottenere i limiti di qualificazione o confermare la forma in vista degli impegni internazionali dell'estate.",
+      ],
+      whoTitle: "Chi organizza",
+      whoText: [
+        "I Campionati sono organizzati dalla Federazione Ticinese di Atletica Leggera (FTAL) su mandato della federazione nazionale Swiss Athletics, con il sostegno delle società di atletica del Cantone.",
+        "Un comitato d'organizzazione coordina il lavoro di un ampio gruppo di volontari: nel 2025 sono state quasi 200 le persone coinvolte nelle due giornate di gara.",
+      ],
+      regionTitle: "Svizzera orientale",
+      regionText:
+        "Partecipano le società dei Cantoni Appenzello Interno, Appenzello Esterno, Glarona, Grigioni, San Gallo, Sciaffusa, Ticino, Turgovia e Zurigo, oltre al Principato del Liechtenstein.",
+      missionTitle: "Perché lo facciamo",
+      mission: [
+        { title: "Gareggiare in casa", text: "Offrire ai giovani talenti ticinesi l'occasione di confrontarsi ad alto livello a due passi da casa, con il sostegno di amici e famiglie." },
+        { title: "Far crescere il movimento", text: "Dare visibilità all'atletica ticinese e mostrare che, unendo le forze delle società, il territorio sa organizzare eventi di questo livello." },
+        { title: "Accogliere", text: "Far scoprire Bellinzona e il Ticino a centinaia di atleti, allenatori e famiglie in arrivo da tutta la Svizzera orientale." },
+      ],
+      partnersTitle: "Partner istituzionali",
+      partners: [
+        { name: "Swiss Athletics", role: "Federazione nazionale, mandante dei Campionati", url: "https://www.swiss-athletics.ch" },
+        { name: "FTAL", role: "Federazione Ticinese di Atletica Leggera, organizzatrice", url: "" },
+        { name: "Città di Bellinzona", role: "Stadio Comunale e supporto logistico", url: "https://www.bellinzona.ch" },
+      ],
+      committeeCta: "Il comitato d'organizzazione",
     },
     comitato: {
       eyebrow: "Chi siamo",
@@ -160,6 +214,8 @@ const it = {
       contactTitle: "Contatti",
       contactText: "Scrivici a",
       contactEmpty: "L'indirizzo di contatto sarà pubblicato a breve.",
+      committeeTitle: "Comitato d'organizzazione",
+      teamTitle: "Responsabili e collaboratori",
     },
   },
   schedule: {
@@ -184,7 +240,7 @@ const it = {
     },
   },
   footer: {
-    organizer: "Organizzato dal Comitato d'organizzazione Regionali 2027 Bellinzona.",
+    organizer: "Organizzato dalla Federazione Ticinese di Atletica Leggera (FTAL) su mandato di Swiss Athletics.",
     rights: "Campionati Regionali di Atletica Bellinzona 2027",
   },
   notFound: {

@@ -86,14 +86,43 @@ export async function saveSponsor(formData: FormData) {
     published: bool(formData, "published"),
     ...(logo_url !== undefined ? { logo_url } : {}),
   };
-  const { error } = id
-    ? await sb.from("sponsors").update(row).eq("id", id)
-    : await sb.from("sponsors").insert(row);
-  if (error) back(from, "error", "save");
+  let sponsorId = id;
+  if (id) {
+    const { error } = await sb.from("sponsors").update(row).eq("id", id);
+    if (error) back(from, "error", "save");
+  } else {
+    const { data, error } = await sb.from("sponsors").insert(row).select("id").single();
+    if (error || !data) back(from, "error", "save");
+    sponsorId = data.id;
+  }
+
+  // contatti e accordo (tabella riservata agli admin)
+  const amount = str(formData, "amount_chf").replace(/['\s]/g, "").replace(",", ".");
+  const status = str(formData, "status");
+  const contact = {
+    sponsor_id: sponsorId,
+    legal_name: optional(formData, "legal_name"),
+    contact_name: optional(formData, "contact_name"),
+    salutation: optional(formData, "salutation"),
+    email: optional(formData, "contact_email"),
+    phone: optional(formData, "contact_phone"),
+    street: optional(formData, "street"),
+    postal_code: optional(formData, "postal_code"),
+    city: optional(formData, "city"),
+    country: str(formData, "country") || "Svizzera",
+    amount_chf: amount && Number.isFinite(Number(amount)) ? Number(amount) : null,
+    agreement_date: optional(formData, "agreement_date"),
+    status: sponsorStatuses.includes(status) ? status : "contatto",
+    notes: optional(formData, "notes"),
+  };
+  const { error: cErr } = await sb.from("sponsor_contacts").upsert(contact, { onConflict: "sponsor_id" });
+  if (cErr) back(`/admin/sponsor?id=${sponsorId}`, "error", "save");
 
   updateTag("sponsors");
-  back(id ? `/admin/sponsor?id=${id}` : "/admin/sponsor", "ok", id ? "updated" : "created");
+  back(`/admin/sponsor?id=${sponsorId}`, "ok", id ? "updated" : "created");
 }
+
+const sponsorStatuses = ["contatto", "proposta", "confermato", "fatturato", "pagato", "annullato"];
 
 export async function toggleSponsor(formData: FormData) {
   const { sb } = await requireAdmin();
@@ -124,7 +153,20 @@ export async function saveTier(formData: FormData) {
   const display = str(formData, "display");
   const from = id ? `/admin/tier?id=${id}` : "/admin/tier";
   if (!name || !displays.includes(display)) back(from, "error", "required");
-  const row = { name, display, sort_order: int(formData, "sort_order") };
+  const price = str(formData, "price_chf").replace(/['\s]/g, "").replace(",", ".");
+  const max = str(formData, "max_sponsors");
+  const row = {
+    name,
+    display,
+    sort_order: int(formData, "sort_order"),
+    price_chf: price && Number.isFinite(Number(price)) ? Number(price) : null,
+    price_public: bool(formData, "price_public"),
+    max_sponsors: max ? Number.parseInt(max, 10) || null : null,
+    benefits: str(formData, "benefits")
+      .split("\n")
+      .map((b) => b.trim())
+      .filter(Boolean),
+  };
   const { error } = id
     ? await sb.from("sponsor_tiers").update(row).eq("id", id)
     : await sb.from("sponsor_tiers").insert(row);
@@ -232,4 +274,81 @@ export async function deleteMapPoint(formData: FormData) {
   if (error) back("/admin/mappa", "error", "delete");
   updateTag("map");
   back("/admin/mappa", "ok", "deleted");
+}
+
+// ---------------------------------------------------------------- impostazioni private
+const privateKeys = [
+  "sender_name",
+  "sender_address",
+  "letter_place",
+  "signer_name",
+  "signer_role",
+  "contact_name",
+  "contact_email",
+  "contact_phone",
+  "iban",
+  "account_holder",
+  "payment_days",
+];
+
+export async function savePrivateSettings(formData: FormData) {
+  const { sb } = await requireAdmin();
+  const rows = privateKeys.map((key) => {
+    const v = formData.get(key);
+    return { key, value: typeof v === "string" ? v.trim() : "" };
+  });
+  const { error } = await sb.from("private_settings").upsert(rows, { onConflict: "key" });
+  if (error) back("/admin/impostazioni", "error", "save");
+  back("/admin/impostazioni", "ok", "updated");
+}
+
+// ---------------------------------------------------------------- comitato
+export async function saveMember(formData: FormData) {
+  const { sb } = await requireAdmin();
+  const id = str(formData, "id");
+  const from = id ? `/admin/comitato?id=${id}` : "/admin/comitato";
+  const full_name = str(formData, "full_name");
+  const role = str(formData, "role");
+  if (!full_name || !role) back(from, "error", "required");
+
+  let photo_url: string | null | undefined;
+  const file = formData.get("photo");
+  if (file instanceof File && file.size > 0) {
+    const ext = (file.name.split(".").pop() ?? "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const path = `committee/${crypto.randomUUID()}.${ext}`;
+    const { error } = await sb.storage.from("media").upload(path, file, { contentType: file.type });
+    if (error) back(from, "error", "upload");
+    photo_url = sb.storage.from("media").getPublicUrl(path).data.publicUrl;
+  } else if (bool(formData, "remove_photo")) {
+    photo_url = null;
+  }
+
+  const row = {
+    full_name,
+    role,
+    area: optional(formData, "area"),
+    email: optional(formData, "email"),
+    responsibilities: str(formData, "responsibilities")
+      .split("\n")
+      .map((r) => r.trim())
+      .filter(Boolean),
+    is_committee: bool(formData, "is_committee"),
+    sort_order: int(formData, "sort_order"),
+    published: bool(formData, "published"),
+    ...(photo_url !== undefined ? { photo_url } : {}),
+  };
+  const { error } = id
+    ? await sb.from("committee_members").update(row).eq("id", id)
+    : await sb.from("committee_members").insert(row);
+  if (error) back(from, "error", "save");
+  updateTag("committee");
+  back(from, "ok", id ? "updated" : "created");
+}
+
+export async function deleteMember(formData: FormData) {
+  const { sb } = await requireAdmin();
+  const { error } = await sb.from("committee_members").delete().eq("id", str(formData, "id"));
+  if (error) back("/admin/comitato", "error", "delete");
+  updateTag("committee");
+  back("/admin/comitato", "ok", "deleted");
 }

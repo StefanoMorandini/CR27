@@ -243,3 +243,11 @@ body {
     display: none;
   }
 }
+
+/* Lettere dell'area admin: foglio A4 */
+@media print {
+  @page {
+    size: A4;
+    margin: 16mm 18mm;
+  }
+}

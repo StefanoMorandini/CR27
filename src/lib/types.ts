@@ -42,6 +42,30 @@ export interface SponsorTier {
   name: string;
   display: TierDisplay;
   sort_order: number;
+  price_chf: number | null;
+  price_public: boolean;
+  max_sponsors: number | null;
+  benefits: string[];
+}
+
+export type SponsorStatus = "contatto" | "proposta" | "confermato" | "fatturato" | "pagato" | "annullato";
+
+/** Contatti e dati dell'accordo: solo area admin (RLS). */
+export interface SponsorContact {
+  sponsor_id: string;
+  legal_name: string | null;
+  contact_name: string | null;
+  salutation: string | null;
+  email: string | null;
+  phone: string | null;
+  street: string | null;
+  postal_code: string | null;
+  city: string | null;
+  country: string;
+  amount_chf: number | null;
+  agreement_date: string | null;
+  status: SponsorStatus;
+  notes: string | null;
 }
 
 export interface Sponsor {
@@ -77,6 +101,8 @@ export interface CommitteeMember {
   area: string | null;
   email: string | null;
   photo_url: string | null;
+  responsibilities: string[];
+  is_committee: boolean;
 }
 
 export interface Announcement {

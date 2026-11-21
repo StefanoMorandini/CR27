@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { requireAdmin } from "@/lib/admin/auth";
-import type { Sponsor, SponsorTier } from "@/lib/types";
+import type { Sponsor, SponsorContact, SponsorTier } from "@/lib/types";
 import { toggleSponsor } from "../actions";
 import { Flash, Loading, PageTitle } from "../ui";
-import { SponsorForm } from "./SponsorForm";
+import { SponsorForm, statusLabels } from "./SponsorForm";
 
 export const metadata = { title: "Sponsor" };
 
@@ -16,10 +16,12 @@ async function SponsorAdmin({ searchParams }: { searchParams: SP }) {
   const tierFilter = typeof sp.tier === "string" ? sp.tier : undefined;
 
   const { sb } = await requireAdmin();
-  const [{ data: sponsors }, { data: tiers }] = await Promise.all([
+  const [{ data: sponsors }, { data: tiers }, { data: contacts }] = await Promise.all([
     sb.from("sponsors").select("*").order("sort_order").order("name"),
     sb.from("sponsor_tiers").select("*").order("sort_order"),
+    sb.from("sponsor_contacts").select("*"),
   ]);
+  const contactOf = new Map(((contacts ?? []) as SponsorContact[]).map((c) => [c.sponsor_id, c]));
   const tierList = (tiers ?? []) as SponsorTier[];
   const tierOrder = new Map(tierList.map((t, i) => [t.id, i]));
   const tierName = new Map(tierList.map((t) => [t.id, t.name]));
@@ -77,7 +79,7 @@ async function SponsorAdmin({ searchParams }: { searchParams: SP }) {
                   <th className="px-5 py-2.5 font-bold">Logo</th>
                   <th className="px-3 py-2.5 font-bold">Nome</th>
                   <th className="px-3 py-2.5 font-bold">Tier</th>
-                  <th className="px-3 py-2.5 font-bold">Sito</th>
+                  <th className="px-3 py-2.5 font-bold">Accordo</th>
                   <th className="px-3 py-2.5 text-center font-bold">Ordine</th>
                   <th className="px-3 py-2.5 font-bold">Stato</th>
                   <th className="px-5 py-2.5" />
@@ -104,14 +106,17 @@ async function SponsorAdmin({ searchParams }: { searchParams: SP }) {
                         </Link>
                       </td>
                       <td className="px-3 py-3 text-muted">{tierName.get(s.tier_id) ?? "—"}</td>
-                      <td className="max-w-40 truncate px-3 py-3">
-                        {s.website_url ? (
-                          <a href={s.website_url} target="_blank" rel="noopener" className="text-blue hover:underline">
-                            {s.website_url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
-                          </a>
-                        ) : (
-                          <span className="text-muted">—</span>
-                        )}
+                      <td className="px-3 py-3">
+                        {(() => {
+                          const c = contactOf.get(s.id);
+                          if (!c) return <span className="text-xs text-amber-700">mancano i contatti</span>;
+                          return (
+                            <span className="text-xs">
+                              <span className="block font-semibold">{statusLabels[c.status]}</span>
+                              <span className="text-muted">{c.contact_name ?? "—"}</span>
+                            </span>
+                          );
+                        })()}
                       </td>
                       <td className="px-3 py-3 text-center tabular-nums text-muted">{s.sort_order}</td>
                       <td className="px-3 py-3">
@@ -156,7 +161,7 @@ async function SponsorAdmin({ searchParams }: { searchParams: SP }) {
             .
           </p>
         ) : (
-          <SponsorForm sponsor={selected} tiers={tierList} />
+          <SponsorForm sponsor={selected} tiers={tierList} contact={selected ? contactOf.get(selected.id) : undefined} />
         )}
       </aside>
     </div>
