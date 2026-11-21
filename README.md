@@ -45,11 +45,33 @@ src/
     brand/               LogoMark (SVG del logo, animato), Logo, Skyline (Bellinzona)
     layout/              Header, MobileMenu, MobileTabBar, Footer, LanguageSwitcher
     home/Countdown.tsx   countdown a "pettorali"
+  app/admin/             area admin (layout separato, senza prefisso lingua)
   lib/
+    admin/auth.ts        requireAdmin(): sessione + verifica tabella admins
+    supabase/            client pubblico (cache), server (sessione), browser
     data.ts              accesso ai dati (cache + tag per l'invalidazione)
     event.ts             date e dati fissi dell'evento
 supabase/migrations/     schema SQL versionato
 ```
+
+## Area admin
+
+`/admin` — accesso con email e password (Supabase Auth). Admin: `stefano@mfd.ch`.
+
+- **Sponsor**: aggiungi / modifica / elimina, logo (PNG, JPG, WEBP, SVG — max 5 MB), pubblicato o bozza
+- **Tier**: livelli sponsor con nome, ordine e visualizzazione (in evidenza, grande, medio, piccolo)
+- **Link e risultati**: risultati live, pagina da incorporare, iscrizioni, email di contatto, link a risultati / liste di partenza / documenti
+- **Password**: cambio password; "Password dimenticata" dalla pagina di accesso
+
+Le modifiche sono visibili subito sul sito (invalidazione della cache con `updateTag`).
+
+Sicurezza:
+- registrazioni pubbliche disattivate in Supabase: gli account si creano solo dal pannello Supabase
+- un utente è admin solo se presente nella tabella `admins`; le scritture passano dalle regole RLS
+- `src/proxy.ts` protegge tutte le pagine `/admin` (tranne accesso e password)
+
+Per aggiungere un altro admin: creare l'utente in Supabase → Authentication → Users, poi
+`insert into public.admins (user_id, email) values ('<uuid>', '<email>');`
 
 ## Multilingua
 
@@ -87,10 +109,11 @@ registrate in `supabase_migrations.schema_migrations`). Nuove modifiche: aggiung
 
 Tabelle principali:
 
-`schedule_items` · `result_links` · `announcements` · `sponsors` · `accommodations` ·
+`schedule_items` · `result_links` · `announcements` · `sponsors` · `sponsor_tiers` · `accommodations` ·
 `committee_members` · `fb_points` · `fb_menu_items` · `faqs` · `site_settings` · `admins`
 
 Sicurezza (RLS): chiunque legge solo i record `published`; solo gli utenti presenti in `admins` possono scrivere.
+I loghi sono nel bucket Storage pubblico `media` (scrittura solo admin).
 
 Impostazioni in `site_settings` (chiave → valore JSON):
 

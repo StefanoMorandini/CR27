@@ -53,16 +53,16 @@ export function MobileMenu({ items, home, labels }: { items: NavItem[]; home: { 
         createPortal(
         <div id="mobile-menu" className="menu-panel fixed inset-x-0 bottom-0 top-[68px] z-30 overflow-y-auto bg-white pb-24">
           <nav aria-label={labels.menu} className="px-4 py-4">
-            <ul className="overflow-hidden rounded-2xl bg-red">
+            <ul className="track overflow-hidden rounded-2xl bg-red py-2">
               {all.map((item, i) => (
-                <li key={item.key} className="border-b border-white/25 last:border-0">
+                <li key={item.key} className="border-t-[3px] border-white last:border-b-[3px]">
                   <NavLink
                     href={item.href}
                     exact={item.key === "home"}
                     onClick={() => setOpen(false)}
                     className="lane-row flex items-center gap-4 px-5 py-4 text-white aria-[current=page]:bg-red-dark"
                   >
-                    <span className="font-display w-7 text-2xl font-black text-white/50">{i + 1}</span>
+                    <span className="font-display w-7 text-2xl font-black text-white">{i + 1}</span>
                     <span className="font-display flex-1 text-xl font-extrabold uppercase">{item.label}</span>
                     <span aria-hidden className="lane-arrow text-xl">→</span>
                   </NavLink>

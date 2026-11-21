@@ -12,6 +12,7 @@ import type {
   ScheduleItem,
   SiteSettings,
   Sponsor,
+  SponsorTier,
 } from "./types";
 
 /**
@@ -65,7 +66,21 @@ export async function getSponsors(): Promise<Sponsor[]> {
   "use cache";
   cacheLife("hours");
   cacheTag("sponsors");
-  return select<Sponsor>("sponsors", ["sort_order"], fallbackSponsors);
+  return select<Sponsor>("sponsors", ["sort_order", "name"], fallbackSponsors);
+}
+
+export async function getSponsorTiers(): Promise<SponsorTier[]> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("sponsors");
+  const sb = getPublicSupabase();
+  if (!sb) return [];
+  const { data, error } = await sb.from("sponsor_tiers").select("*").order("sort_order");
+  if (error) {
+    console.error("[data] sponsor_tiers:", error.message);
+    return [];
+  }
+  return data as SponsorTier[];
 }
 
 export async function getAccommodations(): Promise<Accommodation[]> {

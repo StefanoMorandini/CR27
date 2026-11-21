@@ -126,14 +126,6 @@ const it = {
     sponsor: {
       eyebrow: "Grazie",
       title: "Sponsor e partner",
-      tiers: {
-        main: "Main sponsor",
-        gold: "Gold",
-        silver: "Silver",
-        supporter: "Sostenitori",
-        institutional: "Partner istituzionali",
-        media: "Media partner",
-      },
       empty: "Gli sponsor saranno presentati prossimamente.",
       becomeTitle: "Diventa sponsor",
       becomeText:

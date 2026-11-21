@@ -3,7 +3,7 @@ import { LogoMark } from "@/components/brand/LogoMark";
 import { Skyline } from "@/components/brand/Skyline";
 import { Countdown } from "@/components/home/Countdown";
 import { SponsorWall } from "@/components/SponsorWall";
-import { getAnnouncements, getSponsors } from "@/lib/data";
+import { getAnnouncements, getSponsors, getSponsorTiers } from "@/lib/data";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { event } from "@/lib/event";
 
@@ -16,11 +16,12 @@ const levelStyle = {
 } as const;
 
 export default async function Home() {
-  const [dict, lang, announcements, sponsors] = await Promise.all([
+  const [dict, lang, announcements, sponsors, tiers] = await Promise.all([
     getDictionary(),
     getLocale(),
     getAnnouncements(),
     getSponsors(),
+    getSponsorTiers(),
   ]);
   const h = dict.home;
   const lanes = (["programma", "risultati", "info", "food", "pernottamento", "sponsor"] as const).map((key) => ({
@@ -113,11 +114,11 @@ export default async function Home() {
         <h2 id="lanes-title" className="reveal font-display text-3xl font-black uppercase sm:text-5xl">
           {h.lanesTitle}
         </h2>
-        <ul className="reveal mt-8 overflow-hidden rounded-3xl bg-red shadow-xl shadow-red/20">
+        <ul className="track reveal mt-8 overflow-hidden rounded-2xl bg-red py-3 shadow-xl shadow-red/20 sm:py-4">
           {lanes.map((l, i) => (
-            <li key={l.key} className="border-b-2 border-dashed border-white/35 last:border-0">
+            <li key={l.key} className="border-t-[3px] border-white last:border-b-[3px]">
               <Link href={l.href} className="lane-row flex items-center gap-4 px-5 py-5 text-white sm:gap-8 sm:px-8 sm:py-6">
-                <span className="font-display w-8 shrink-0 text-4xl font-black text-white/45 sm:w-12 sm:text-6xl">{i + 1}</span>
+                <span className="font-display w-8 shrink-0 text-4xl font-black text-white sm:w-12 sm:text-6xl">{i + 1}</span>
                 <span className="min-w-0 flex-1">
                   <span className="font-display block text-xl font-black uppercase sm:text-3xl">{l.title}</span>
                   <span className="block text-sm text-white/80 sm:text-base">{l.text}</span>
@@ -195,7 +196,7 @@ export default async function Home() {
               {h.sponsorsAll} →
             </Link>
           </div>
-          <SponsorWall sponsors={sponsors} labels={dict.pages.sponsor.tiers} />
+          <SponsorWall sponsors={sponsors} tiers={tiers} />
           <Link
             href={`/${lang}/comitato#contatti`}
             className="lane-row mt-6 flex items-center justify-between rounded-3xl bg-red px-6 py-5 text-white sm:px-8"

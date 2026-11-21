@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EmptyState, PageHeader } from "@/components/PageHeader";
-import { getSponsors } from "@/lib/data";
+import { getSponsors, getSponsorTiers } from "@/lib/data";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { SponsorWall } from "@/components/SponsorWall";
 
@@ -10,13 +10,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SponsorPage() {
-  const [dict, lang, sponsors] = await Promise.all([getDictionary(), getLocale(), getSponsors()]);
+  const [dict, lang, sponsors, tiers] = await Promise.all([getDictionary(), getLocale(), getSponsors(), getSponsorTiers()]);
   const t = dict.pages.sponsor;
   return (
     <>
       <PageHeader eyebrow={t.eyebrow} title={t.title} />
       <div className="mx-auto max-w-5xl space-y-12 px-4 py-10">
-        {sponsors.length > 0 && <SponsorWall sponsors={sponsors} labels={t.tiers} />}
+        {sponsors.length > 0 && <SponsorWall sponsors={sponsors} tiers={tiers} />}
 
         {sponsors.length === 0 && <EmptyState>{t.empty}</EmptyState>}
 

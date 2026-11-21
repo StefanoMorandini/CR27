@@ -1,21 +1,20 @@
-import type { Sponsor, SponsorTier } from "@/lib/types";
+import type { Sponsor, SponsorTier, TierDisplay } from "@/lib/types";
 
-type TierLabels = Record<SponsorTier, string>;
-
-const order: SponsorTier[] = ["main", "gold", "silver", "supporter", "institutional", "media"];
+type Size = "xl" | "lg" | "md" | "sm";
+const sizeOf: Record<TierDisplay, Size> = { featured: "xl", large: "lg", medium: "md", small: "sm" };
 
 /** Contenuto della card: logo se presente, altrimenti il nome come scritta. */
-function Mark({ s, size }: { s: Sponsor; size: "xl" | "lg" | "md" }) {
+function Mark({ s, size }: { s: Sponsor; size: Size }) {
   if (s.logo_url) {
-    const h = { xl: "max-h-24", lg: "max-h-14", md: "max-h-10" }[size];
+    const h = { xl: "max-h-24 sm:max-h-28", lg: "max-h-16", md: "max-h-12", sm: "max-h-10" }[size];
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={s.logo_url} alt={s.name} className={`${h} w-auto max-w-[80%] object-contain`} />;
   }
-  const t = { xl: "text-4xl sm:text-6xl", lg: "text-2xl sm:text-3xl", md: "text-lg sm:text-xl" }[size];
+  const t = { xl: "text-4xl sm:text-6xl", lg: "text-2xl sm:text-3xl", md: "text-xl sm:text-2xl", sm: "text-base sm:text-lg" }[size];
   return <span className={`font-display font-black uppercase leading-none text-ink ${t}`}>{s.name}</span>;
 }
 
-function Card({ s, size, label, className = "" }: { s: Sponsor; size: "xl" | "lg" | "md"; label?: string; className?: string }) {
+function Card({ s, size, label, className = "" }: { s: Sponsor; size: Size; label?: string; className?: string }) {
   const inner = (
     <>
       {label && (
@@ -45,39 +44,46 @@ function Card({ s, size, label, className = "" }: { s: Sponsor; size: "xl" | "lg
   );
 }
 
+const grid: Record<Size, string> = {
+  xl: "grid gap-4",
+  lg: "grid gap-4 sm:grid-cols-2",
+  md: "grid grid-cols-2 gap-4 md:grid-cols-3",
+  sm: "grid grid-cols-2 gap-3 md:grid-cols-4",
+};
+const minH: Record<Size, string> = { xl: "", lg: "min-h-36", md: "min-h-28", sm: "min-h-20 p-4" };
+
 /**
- * Sponsor raggruppati per livello: main sponsor in evidenza (fascia rossa),
- * gold su due colonne, gli altri livelli in griglie più compatte.
+ * Sponsor raggruppati per livello (i livelli e la loro resa grafica si
+ * gestiscono dall'area admin): "featured" = card grande in evidenza.
  */
-export function SponsorWall({ sponsors, labels }: { sponsors: Sponsor[]; labels: TierLabels }) {
-  const byTier = (t: SponsorTier) => sponsors.filter((s) => s.tier === t);
+export function SponsorWall({ sponsors, tiers }: { sponsors: Sponsor[]; tiers: SponsorTier[] }) {
   return (
     <div className="space-y-4">
-      {order.map((tier) => {
-        const list = byTier(tier);
+      {tiers.map((tier) => {
+        const list = sponsors.filter((s) => s.tier_id === tier.id);
         if (list.length === 0) return null;
-        if (tier === "main") {
+        const size = sizeOf[tier.display];
+        if (size === "xl") {
           return (
-            <div key={tier} className="grid gap-4">
+            <div key={tier.id} className={grid.xl}>
               {list.map((s) => (
                 <Card
                   key={s.id}
                   s={s}
                   size="xl"
-                  label={labels.main}
+                  label={tier.name}
                   className="reveal min-h-52 overflow-hidden border-t-[6px] border-t-red bg-gradient-to-b from-red-soft/60 to-white sm:min-h-64"
                 />
               ))}
             </div>
           );
         }
-        const big = tier === "gold";
         return (
-          <div key={tier} className="reveal pt-4">
-            <h3 className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-muted">{labels[tier]}</h3>
-            <div className={`grid gap-4 ${big ? "sm:grid-cols-2" : "grid-cols-2 md:grid-cols-4"}`}>
+          <div key={tier.id} className="reveal pt-4">
+            <h3 className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-muted">{tier.name}</h3>
+            <div className={grid[size]}>
               {list.map((s) => (
-                <Card key={s.id} s={s} size={big ? "lg" : "md"} className={big ? "min-h-36" : "min-h-24"} />
+                <Card key={s.id} s={s} size={size} className={minH[size]} />
               ))}
             </div>
           </div>

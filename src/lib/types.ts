@@ -25,6 +25,8 @@ export interface ScheduleItem {
 }
 
 export interface ResultLink {
+  sort_order: number;
+  published: boolean;
   id: string;
   label: string;
   url: string;
@@ -33,15 +35,24 @@ export interface ResultLink {
   embeddable: boolean;
 }
 
-export type SponsorTier = "main" | "gold" | "silver" | "supporter" | "institutional" | "media";
+export type TierDisplay = "featured" | "large" | "medium" | "small";
+
+export interface SponsorTier {
+  id: string;
+  name: string;
+  display: TierDisplay;
+  sort_order: number;
+}
 
 export interface Sponsor {
   id: string;
   name: string;
-  tier: SponsorTier;
+  tier_id: string;
   logo_url: string | null;
   website_url: string | null;
   description: string | null;
+  sort_order: number;
+  published: boolean;
 }
 
 export interface Accommodation {

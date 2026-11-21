@@ -10,7 +10,7 @@ const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
 /** Lingua corrente (dal segmento /[lang]) — solo lato server. */
 export async function getLocale(): Promise<Locale> {
   const l = await lang();
-  if (!hasLocale(l)) notFound();
+  if (!l || !hasLocale(l)) notFound();
   return l;
 }
 
