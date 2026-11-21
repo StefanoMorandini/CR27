@@ -30,8 +30,9 @@ async function select<T>(table: string, order: string[], fallback: T[]): Promise
   for (const col of order) q = q.order(col, { ascending: true });
   const { data, error } = await q;
   if (error) {
+    // Con Supabase configurato non mostriamo mai i dati di esempio
     console.error(`[data] ${table}:`, error.message);
-    return fallback;
+    return [];
   }
   return (data ?? []) as T[];
 }

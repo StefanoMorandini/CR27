@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageHeader } from "@/components/PageHeader";
+import { EmptyState, PageHeader } from "@/components/PageHeader";
 import { ScheduleView } from "@/components/ScheduleView";
 import { getSchedule } from "@/lib/data";
 import { site } from "@/lib/site";
@@ -16,7 +16,13 @@ export default async function ProgrammaPage() {
         intro="Orario provvisorio delle gare. Nei giorni di gara gli orari vengono aggiornati in tempo reale."
       />
       <div className="mx-auto max-w-3xl px-4">
-        <ScheduleView items={items} days={site.days} />
+        {items.length === 0 ? (
+          <div className="py-10">
+            <EmptyState>Il programma orario è in preparazione e sarà pubblicato qui.</EmptyState>
+          </div>
+        ) : (
+          <ScheduleView items={items} days={site.days} />
+        )}
       </div>
     </>
   );

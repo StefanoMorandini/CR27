@@ -54,7 +54,13 @@ Le pagine sono prerenderizzate staticamente, quindi il sito resta veloce anche c
 
 ## Database (Supabase)
 
-Lo schema è in `supabase/migrations/`. Tabelle principali:
+Progetto Supabase **CR27** (`facfytnighffttxipubb`, regione Zurigo `eu-central-2`).
+
+Lo schema è in `supabase/migrations/` (i nomi dei file corrispondono alle versioni
+registrate in `supabase_migrations.schema_migrations`). Nuove modifiche: aggiungere un file
+`AAAAMMGGhhmmss_nome.sql` e applicarlo (Supabase CLI `supabase db push`, oppure Management API).
+
+Tabelle principali:
 
 `schedule_items` · `result_links` · `announcements` · `sponsors` · `accommodations` ·
 `committee_members` · `fb_points` · `fb_menu_items` · `faqs` · `site_settings` · `admins`
