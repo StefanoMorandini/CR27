@@ -57,7 +57,9 @@ const it = {
     cityTitle: "Tre castelli, tre corsie",
     cityText: "I castelli di Bellinzona, patrimonio mondiale UNESCO, e le corsie della pista.",
     castles: ["Castelgrande", "Montebello", "Sasso Corbaro"],
-    sponsorsTitle: "Con il sostegno di",
+    sponsorsTitle: "Sponsor e partner",
+    sponsorsAll: "Tutti gli sponsor",
+    sponsorsBecome: "Diventa sponsor",
   },
   pages: {
     programma: {

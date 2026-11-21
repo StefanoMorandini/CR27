@@ -2,6 +2,7 @@ import Link from "next/link";
 import { LogoMark } from "@/components/brand/LogoMark";
 import { Skyline } from "@/components/brand/Skyline";
 import { Countdown } from "@/components/home/Countdown";
+import { SponsorWall } from "@/components/SponsorWall";
 import { getAnnouncements, getSponsors } from "@/lib/data";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { event } from "@/lib/event";
@@ -185,22 +186,23 @@ export default async function Home() {
 
       {/* --------------------------------------------------- SPONSOR */}
       {sponsors.length > 0 && (
-        <section className="mx-auto max-w-5xl px-4 pt-16" aria-labelledby="sponsor-strip">
-          <h2 id="sponsor-strip" className="text-center text-xs font-bold uppercase tracking-[0.3em] text-muted">
-            {h.sponsorsTitle}
-          </h2>
-          <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
-            {sponsors.map((s) => (
-              <li key={s.id} className="font-display text-xl font-bold text-ink/70">
-                {s.logo_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={s.logo_url} alt={s.name} className="h-10 w-auto object-contain grayscale transition hover:grayscale-0" />
-                ) : (
-                  s.name
-                )}
-              </li>
-            ))}
-          </ul>
+        <section className="mx-auto max-w-5xl px-4 pt-16 sm:pt-24" aria-labelledby="sponsor-title">
+          <div className="reveal mb-8 flex flex-wrap items-end justify-between gap-3">
+            <h2 id="sponsor-title" className="font-display text-3xl font-black uppercase sm:text-5xl">
+              {h.sponsorsTitle}
+            </h2>
+            <Link href={`/${lang}/sponsor`} className="font-semibold text-blue underline-offset-4 hover:underline">
+              {h.sponsorsAll} →
+            </Link>
+          </div>
+          <SponsorWall sponsors={sponsors} labels={dict.pages.sponsor.tiers} />
+          <Link
+            href={`/${lang}/comitato#contatti`}
+            className="lane-row mt-6 flex items-center justify-between rounded-3xl bg-red px-6 py-5 text-white sm:px-8"
+          >
+            <span className="font-display text-xl font-black uppercase sm:text-2xl">{h.sponsorsBecome}</span>
+            <span aria-hidden className="lane-arrow text-2xl">→</span>
+          </Link>
         </section>
       )}
     </>
