@@ -152,7 +152,10 @@ async function TierAdmin({ searchParams }: { searchParams: SP }) {
           <form action={deleteTier} className="mt-4 border-t border-line pt-4">
             <input type="hidden" name="id" value={selected.id} />
             {count(selected.id).length > 0 ? (
-              <p className="text-xs text-muted">Per eliminare questo tier sposta prima i suoi {count(selected.id).length} sponsor.</p>
+              <p className="text-xs text-muted">
+                Per eliminare questo tier sposta prima{" "}
+                {count(selected.id).length === 1 ? "il suo sponsor" : `i suoi ${count(selected.id).length} sponsor`} in un altro tier.
+              </p>
             ) : (
               <ConfirmButton message={`Eliminare il tier "${selected.name}"?`}>Elimina tier</ConfirmButton>
             )}
